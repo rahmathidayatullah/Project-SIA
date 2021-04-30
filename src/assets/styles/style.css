@@ -1,0 +1,9 @@
+.bg-home{
+    background: linear-gradient(180deg, #0CA593 0%, #139F7E 100%);
+}
+.bg-card{
+    background: linear-gradient(180deg, #128C7E 0%, #0CA593 100%);
+}
+.shadow-card{
+   box-shadow: drop-shadow(0px 4px 23px rgba(0, 0, 0, 0.09));
+}

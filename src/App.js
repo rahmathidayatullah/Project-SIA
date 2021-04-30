@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import SwitchRoute from "components/SwitchRoute";
+import routes from "routes";
+import { listen } from "app/listener";
 
 function App() {
+  React.useEffect(() => {
+    listen();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <React.Suspense
+      fallback={
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "150px",
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <p>loading....</p>
+        </div>
+      }
+    >
+      <Router>
+        <SwitchRoute routes={routes} />
+      </Router>
+    </React.Suspense>
   );
 }
 
