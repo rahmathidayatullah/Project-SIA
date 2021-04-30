@@ -3,12 +3,29 @@ import IconAccount from "assets/icon/Account";
 import IconAlert from "assets/icon/Alert";
 import IconTime from "assets/icon/Time";
 import IconHero from "assets/icon/ImageHero.svg";
-// import Intersect from "assets/icon/Intersect.svg";
-// import Intersect1 from "assets/icon/Intersect (1).svg";
+import IconKamera from "assets/icon/Kamera";
+import IconCheck from "assets/icon/Check";
 import Modal from "components/Modal";
+import Webcam from 'react-webcam'
 
 export default function Home() {
   const [showModal, setShowModal] = React.useState(false);
+  const webcamRef = React.useRef(null)
+  const [image, setImage] = React.useState("")
+  const [field, setField] = React.useState({
+    image: ''
+  })
+
+  const capture = React.useCallback(async () => {
+    const imageSrc = webcamRef.current.getScreenshot()
+    setImage(imageSrc)
+  }, [webcamRef])
+
+  const handleSaveImage = () => {
+    setField({ ...field, image: image })
+  }
+
+
   return (
     <div className="w-screen h-screen bg-home relative p-4">
       {/* itersect */}
@@ -29,8 +46,31 @@ export default function Home() {
           >
             {/* here image */}
             <div className="relative">
-              <img src={IconHero} />
+              {/* <img src={IconHero} /> */}
+              <div className="d-flex flex-column wrapVideos">
+                <Webcam
+                  audio={false}
+                  height={420}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  width={'500'}
+                  mirrored={true}
+                />
+              </div>
             </div>
+          </div>
+        }
+
+        footer={
+          <div className="absolute left-0 bottom-0 flex items-center justify-between w-full p-4 border-t bg-white rounded-bl-lg rounded-br-lg">
+            <button onClick={capture} className="px-4 py-2 rounded-lg border bg-blue font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center">
+              <IconKamera className="mr-2" />
+              <p>Ambil foto</p>
+            </button>
+            <button onClick={() => { handleSaveImage() }} className="px-4 py-2 rounded-lg border bg-orange font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center">
+              <IconCheck className="mr-2" />
+              <p>Selesai</p>
+            </button>
           </div>
         }
       />
@@ -89,7 +129,7 @@ export default function Home() {
               <div className="w-32 h-32 border rounded-2xl">
                 {/* here image */}
                 <div className="relative">
-                  <img src={IconHero} />
+                  <img src={image === "" ? IconHero : image} />
                 </div>
               </div>
               <h1 className="mt-4 font-semibold text-green1 text-2xl">
