@@ -1,11 +1,27 @@
-import React from "react";
+import * as React from "react";
 import IconTime from "assets/icon/Time";
 import IconNavigasi from "assets/icon/Navigasi";
 import IconAsk from "assets/icon/Ask";
 import IconArrow from "assets/icon/Arrow";
 import IconHero from "assets/icon/ImageHero.svg";
+import Webcam from 'react-webcam'
 
 export default function Quiz() {
+  const [image, setImage] = React.useState("")
+  const [field, setField] = React.useState({
+    image: ''
+  })
+
+  const webcamRef = React.useRef(null)
+
+  const capture = React.useCallback(async () => {
+    const imageSrc = webcamRef.current.getScreenshot()
+    setImage(imageSrc)
+  }, [webcamRef])
+
+  const handleSaveImage = () => {
+    setField({ ...field, image: image })
+  }
   return (
     <div className="bg-gray2 h-screen p-3">
       <div className="grid grid-cols-12 gap-4 h-full">
@@ -262,7 +278,17 @@ export default function Quiz() {
                 <div className="h-44 w-full relative border rounded-lg flex justify-center">
                   {/* here image */}
                   <div className="relative">
-                    <img src={IconHero} />
+                    {/* <img src={IconHero} /> */}
+                    <div className="d-flex flex-column wrapVideos">
+                      <Webcam
+                        audio={false}
+                        height={420}
+                        ref={webcamRef}
+                        screenshotFormat="image/jpeg"
+                        width={'500'}
+                        mirrored={true}
+                      />
+                    </div>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 bg-green1 rounded-br-lg rounded-bl-lg">
                     <p className="text-white p-2 font-semibold text-xs">
@@ -275,7 +301,17 @@ export default function Quiz() {
                 <div className="h-44 w-full relative border rounded-lg flex justify-center">
                   {/* here image */}
                   <div className="relative">
-                    <img src={IconHero} />
+                    {/* <img src={IconHero} /> */}
+                    <div className="d-flex flex-column wrapVideos">
+                      <Webcam
+                        audio={false}
+                        height={420}
+                        ref={webcamRef}
+                        screenshotFormat="image/jpeg"
+                        width={'500'}
+                        mirrored={true}
+                      />
+                    </div>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 rounded-br-lg rounded-bl-lg bg-green1 p-2">
                     <p className="text-white font-semibold text-xs">
