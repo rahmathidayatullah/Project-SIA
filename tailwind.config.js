@@ -34,12 +34,19 @@ module.exports = {
       },
       fontSize: {
         litle: "10px",
+        fulllitle: "8px",
       },
       spacing: {
         "497px": "497px",
+        "52vh": "52vh",
       },
       screens: {
         xshome: "438px",
+        xsquis: "484px",
+      },
+      inset: {
+        "130%": "-130%",
+        "250%": "-250%",
       },
     },
   },

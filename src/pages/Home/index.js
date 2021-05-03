@@ -32,7 +32,7 @@ export default function Home() {
       {/* <img src={Intersect1} /> */}
       <Modal
         header={
-          <h1 className="absolute font-semibold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transform">
+          <h1 className="absolute font-semibold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transform ">
             Verifikasi foto
           </h1>
         }
@@ -63,7 +63,7 @@ export default function Home() {
           <div className="absolute left-0 bottom-0 flex items-center justify-between w-full p-4 border-t bg-white rounded-bl-lg rounded-br-lg">
             <button
               onClick={capture}
-              className="px-4 py-2 rounded-lg border bg-blue font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center"
+              className="px-4 py-2 rounded-lg border bg-blue font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center focus:outline-none outline-none"
             >
               <IconKamera className="mr-2" />
               <p>Ambil foto</p>
@@ -72,7 +72,7 @@ export default function Home() {
               onClick={() => {
                 handleSaveImage();
               }}
-              className="px-4 py-2 rounded-lg border bg-orange font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center"
+              className="px-4 py-2 rounded-lg border bg-orange font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center focus:outline-none outline-none"
             >
               <IconCheck className="mr-2" />
               <p>Selesai</p>
@@ -143,10 +143,10 @@ export default function Home() {
             </div>
             {/* image profile */}
             <div className="w-full justify-center items-center flex-col flex mt-5 xl:mt-12">
-              <div className="w-32 h-32 border rounded-2xl">
+              <div className="w-32 h-32 border-2 rounded-2xl overflow-hidden">
                 {/* here image */}
-                <div className="relative">
-                  <img src={image === "" ? IconHero : image} />
+                <div className="relative h-full flex items-center">
+                  <img className="" src={image === "" ? IconHero : image} />
                 </div>
               </div>
               <h1 className="mt-4 font-semibold text-green1 text-base xshome:text-xl xl:text-2xl">
