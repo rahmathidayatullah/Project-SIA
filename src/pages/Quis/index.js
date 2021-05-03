@@ -1,38 +1,40 @@
-import * as React from "react";
+import React, { useState } from "react";
 import IconTime from "assets/icon/Time";
 import IconNavigasi from "assets/icon/Navigasi";
 import IconAsk from "assets/icon/Ask";
 import IconArrow from "assets/icon/Arrow";
 import IconHero from "assets/icon/ImageHero.svg";
-import Webcam from 'react-webcam'
+import Webcam from "react-webcam";
+import IconClose from "assets/icon/Close";
 
 export default function Quiz() {
-  const [image, setImage] = React.useState("")
+  const [showBantuan, setShowBantuan] = useState(false);
+  const [image, setImage] = React.useState("");
   const [field, setField] = React.useState({
-    image: ''
-  })
+    image: "",
+  });
 
-  const webcamRef = React.useRef(null)
+  const webcamRef = React.useRef(null);
 
   const capture = React.useCallback(async () => {
-    const imageSrc = webcamRef.current.getScreenshot()
-    setImage(imageSrc)
-  }, [webcamRef])
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImage(imageSrc);
+  }, [webcamRef]);
 
   const handleSaveImage = () => {
-    setField({ ...field, image: image })
-  }
+    setField({ ...field, image: image });
+  };
   return (
-    <div className="bg-gray2 h-screen p-3">
-      <div className="grid grid-cols-12 gap-4 h-full">
-        <div className="col-span-8 h-full">
+    <div className="bg-gray2 h-screen p-3 w-screen">
+      <div className="grid grid-cols-12 gap-4 h-full relative w-full overflow-x-hidden">
+        <div className="col-span-12 xl:col-span-8 h-full">
           {/* head */}
           <div className="p-2 bg-white rounded-lg">
             <div className="flex justify-between border-b pb-2">
               <p className="font-semibold text-md">Soal ujian</p>
               <div className="flex items-center">
                 <p className="text-orange text-sm mr-3">Sisa waktu</p>
-                <div className="flex items-center text-sm pl-1 pr-3 py-1 rounded-md bg-orange text-white">
+                <div className="flex items-center text-sm pl-1 pr-3 py-1 rounded-md bg-orange text-white mr-2 xl:mr-0">
                   {/* icon time */}
                   <IconTime
                     width="19"
@@ -42,6 +44,14 @@ export default function Quiz() {
                   />
                   <p>12 : 00 : 00</p>
                 </div>
+                <button
+                  className="block xl:hidden text-sm px-2 py-1 rounded-md bg-green duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none"
+                  onClick={() =>
+                    setShowBantuan(showBantuan === false ? true : false)
+                  }
+                >
+                  Menu bantuan
+                </button>
               </div>
             </div>
             {/* section soal */}
@@ -103,7 +113,7 @@ export default function Quiz() {
             <div className="col-span-1">
               <div className="rounded-lg bg-white px-4 py-5">
                 {/* head */}
-                <div className="flex items-center justify-between pb-2 border-b">
+                <div className="flex flex-col md:flex-row lg:items-center justify-between pb-2 border-b">
                   <div className="flex items-center">
                     {/* icon navigasi */}
                     <IconNavigasi className="mr-1" />
@@ -111,7 +121,7 @@ export default function Quiz() {
                       Navigasi
                     </p>
                   </div>
-                  <div className="flex items-center">
+                  <div className="flex items-center mt-3 md:mt-0">
                     <div className="flex items-center mr-2">
                       <div className="h-3 w-3 rounded-full mr-1 bg-blue"></div>
                       {/* div bullet */}
@@ -271,11 +281,23 @@ export default function Quiz() {
             </div>
           </div>
         </div>
-        <div className="col-span-4">
-          <div className="bg-white p-3 rounded-lg">
+        <div
+          className={`absolute xl:static  top-0  ${
+            showBantuan === false ? "-right-full" : "right-0"
+          }  col-span-12 xl:static xl:col-span-4 bg-white xl:bg-auto max-w-xl xl:max-w-none h-screen xl:h-auto overflow-y-scroll border-2 xl:border-none duration-300`}
+        >
+          <div className="bg-white p-3 rounded-lg relative">
+            <div
+              className="flex items-center px-4 py-2 rounded-lg bg-green1 max-w-max text-sm text-white mb-2 cursor-pointer hover:bg-opacity-80"
+              onClick={() => setShowBantuan(false)}
+            >
+              <IconClose className="mr-2" fill="white" />
+              <p>Close bantuan</p>
+            </div>
+
             <div className="grid grid-cols-2 gap-2">
               <div className="col-span-1">
-                <div className="h-44 w-full relative border rounded-lg flex justify-center">
+                <div className="h-auto xl:h-44 w-full relative border rounded-lg flex justify-center">
                   {/* here image */}
                   <div className="relative">
                     {/* <img src={IconHero} /> */}
@@ -285,7 +307,7 @@ export default function Quiz() {
                         height={420}
                         ref={webcamRef}
                         screenshotFormat="image/jpeg"
-                        width={'500'}
+                        width={"500"}
                         mirrored={true}
                       />
                     </div>
@@ -298,7 +320,7 @@ export default function Quiz() {
                 </div>
               </div>
               <div className="col-span-1">
-                <div className="h-44 w-full relative border rounded-lg flex justify-center">
+                <div className="h-auto xl:h-44 w-full relative border rounded-lg flex justify-center">
                   {/* here image */}
                   <div className="relative">
                     {/* <img src={IconHero} /> */}
@@ -308,7 +330,7 @@ export default function Quiz() {
                         height={420}
                         ref={webcamRef}
                         screenshotFormat="image/jpeg"
-                        width={'500'}
+                        width={"500"}
                         mirrored={true}
                       />
                     </div>

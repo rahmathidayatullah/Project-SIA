@@ -35,6 +35,12 @@ module.exports = {
       fontSize: {
         litle: "10px",
       },
+      spacing: {
+        "497px": "497px",
+      },
+      screens: {
+        xshome: "438px",
+      },
     },
   },
   variants: {
