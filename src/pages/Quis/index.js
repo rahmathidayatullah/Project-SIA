@@ -10,9 +10,9 @@ import Modal from "components/Modal";
 
 export default function Quiz() {
   // alert new tab
-  const valueAlert = () => {
-    alert("tidak boleh buka tab baru !!");
-  };
+  // const valueAlert = () => {
+  //   alert("tidak boleh buka tab baru !!");
+  // };
 
   // set time over
   const time = new Date();
@@ -68,7 +68,7 @@ export default function Quiz() {
 
   useEffect(() => {
     // start();
-    window.addEventListener("focus", valueAlert);
+    // window.addEventListener("focus", valueAlert);
   });
   return (
     <div className="bg-gray2 h-screen p-3 w-screen">
