@@ -9,6 +9,11 @@ import { useTimer } from "react-timer-hook";
 import Modal from "components/Modal";
 
 export default function Quiz() {
+  // alert new tab
+  const valueAlert = () => {
+    alert("tidak boleh buka tab baru !!");
+  };
+
   // set time over
   const time = new Date();
   time.setSeconds(time.getSeconds() + 10);
@@ -62,12 +67,13 @@ export default function Quiz() {
   };
 
   useEffect(() => {
-    start();
+    // start();
+    window.addEventListener("focus", valueAlert);
   });
   return (
     <div className="bg-gray2 h-screen p-3 w-screen">
       {/* <div id="modalTimeOver"></div> */}
-      {isShow && timeOutQuiz()}
+      {/* {isShow && timeOutQuiz()} */}
       <div className="grid grid-cols-12 gap-4 h-full relative w-full overflow-x-hidden">
         <div className="col-span-12 xl:col-span-8 h-full">
           {/* head */}
@@ -337,7 +343,7 @@ export default function Quiz() {
         >
           <div className="bg-white p-3 rounded-lg relative">
             <div
-              className="flex items-center px-4 py-2 rounded-lg bg-green1 max-w-max text-sm text-white mb-2 cursor-pointer hover:bg-opacity-80"
+              className="hidden lg:flex items-center px-4 py-2 rounded-lg bg-green1 max-w-max text-sm text-white mb-2 cursor-pointer hover:bg-opacity-80"
               onClick={() => setShowBantuan(false)}
             >
               <IconClose className="mr-2" fill="white" />
