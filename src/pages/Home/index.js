@@ -7,6 +7,7 @@ import IconKamera from "assets/icon/Kamera";
 import IconCheck from "assets/icon/Check";
 import Modal from "components/Modal";
 import Webcam from "react-webcam";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [showModal, setShowModal] = React.useState(false);
@@ -198,12 +199,18 @@ export default function Home() {
             </div>
             {/* button */}
             <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
-              <button className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 9uration-200">
-                Mulai simulasi
-              </button>
-              <button className=" px-6 py-2 rounded-lg bg-orange text-white hover:bg-opacity-90 duration-200">
-                Mulai simulasi
-              </button>
+              <Link
+                to="/quis"
+                className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 9uration-200 text-center cursor-pointer"
+              >
+                Mulai Tes
+              </Link>
+              <Link
+                to="/quis"
+                className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer"
+              >
+                Mulai Simulasi
+              </Link>
             </div>
           </div>
         </div>

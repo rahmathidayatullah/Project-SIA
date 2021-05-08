@@ -2,6 +2,7 @@ import React from "react";
 import IconKey from "assets/icon/Key";
 import IconMessage from "assets/icon/Message";
 import IconSetting from "assets/icon/Setting";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   return (
@@ -33,9 +34,12 @@ export default function Login() {
           <IconKey className="absolute right-4 top-2" fill="currentColor" />
         </div>
 
-        <button className="py-2 sm:py-3 mt-14 bg-white sm:bg-green1 px-4 border rounded-lg duration-200 text-green1 sm:text-white font-semibold text-sm sm:text-xl sm:hover:bg-opacity-80">
+        <Link
+          to="/home"
+          className="py-2 sm:py-3 mt-14 bg-white sm:bg-green1 px-4 border rounded-lg duration-200 text-green1 sm:text-white font-semibold text-sm sm:text-xl sm:hover:bg-opacity-80 cursor-pointer text-center"
+        >
           Masuk
-        </button>
+        </Link>
       </form>
     </div>
   );

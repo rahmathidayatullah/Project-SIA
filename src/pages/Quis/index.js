@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IconTime from "assets/icon/Time";
 import IconNavigasi from "assets/icon/Navigasi";
 import IconAsk from "assets/icon/Ask";
 import IconArrow from "assets/icon/Arrow";
-import IconHero from "assets/icon/ImageHero.svg";
 import Webcam from "react-webcam";
 import IconClose from "assets/icon/Close";
+import { useTimer } from "react-timer-hook";
+import Modal from "components/Modal";
 
 export default function Quiz() {
+  // set time over
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 10);
+  const { seconds, minutes, hours, start, restart } = useTimer({
+    expiryTimestamp: time,
+    onExpire: () => setIsShow(true),
+  });
+
   const [showBantuan, setShowBantuan] = useState(false);
   const [image, setImage] = React.useState("");
   const [field, setField] = React.useState({
@@ -24,8 +33,41 @@ export default function Quiz() {
   const handleSaveImage = () => {
     setField({ ...field, image: image });
   };
+
+  const [isShow, setIsShow] = useState(false);
+  // close modal
+  const closeModal = () => {
+    setIsShow(false);
+    restart(time);
+  };
+  const timeOutQuiz = () => {
+    return (
+      <Modal
+        show={isShow}
+        close={closeModal}
+        header={
+          <h1 className="absolute left-1/2 transform -translate-x-1/2">
+            Modal title
+          </h1>
+        }
+        content={
+          <div className="pt-5">
+            <h1 className="text-center font-semibold">
+              Waktu anda telah habis
+            </h1>
+          </div>
+        }
+      />
+    );
+  };
+
+  useEffect(() => {
+    start();
+  });
   return (
     <div className="bg-gray2 h-screen p-3 w-screen">
+      {/* <div id="modalTimeOver"></div> */}
+      {isShow && timeOutQuiz()}
       <div className="grid grid-cols-12 gap-4 h-full relative w-full overflow-x-hidden">
         <div className="col-span-12 xl:col-span-8 h-full">
           {/* head */}
@@ -46,7 +88,9 @@ export default function Quiz() {
                     fill="white"
                     className="mr-1"
                   />
-                  <p>12 : 00 : 00</p>
+                  <p>
+                    {hours} : {minutes} : {seconds}
+                  </p>
                 </div>
                 <button
                   className="block xl:hidden text-sm px-2 py-1 rounded-md bg-green duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none mt-2 xsquis:mt-0"
