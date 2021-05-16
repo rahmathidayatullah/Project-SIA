@@ -8,6 +8,10 @@
   box-shadow: drop-shadow(0px 4px 23px rgba(0, 0, 0, 0.09));
 }
 
+.scroll-hidden::-webkit-scrollbar{
+  display: none;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }

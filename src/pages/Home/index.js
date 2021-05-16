@@ -93,6 +93,7 @@ export default function Home() {
               <IconAccount />
             </div>
           </div>
+
           {/* many text */}
           <div className="static lg:absolute top-1/2 transform-none lg:transform -translate-y-1/2 mt-5 sm:mt-3 lg:mt-0">
             <h1 className="text-base xshome:text-2xl xl:text-4xl text-white">
@@ -142,21 +143,58 @@ export default function Home() {
                 </span>
               </h1>
             </div>
-            {/* image profile */}
-            <div className="w-full justify-center items-center flex-col flex mt-5 xl:mt-12">
-              <div className="w-32 h-32 border-2 rounded-2xl overflow-hidden">
-                {/* here image */}
-                <div className="relative h-full flex items-center">
-                  <img className="" src={image === "" ? IconHero : image} />
+            <div className="flex flex-col sm:flex-row items-center justify-between mt-8 mx-2 sm:mx-0">
+              <div className="w-full mt-4 sm:mt-0 sm:w-11/12 shadow-lg border rounded-lg order-2 sm:order-none">
+                <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg">
+                  <div className="text-green">
+                    <p className="font-bold text-xs md:text-sm xl:text-base">
+                      Waktu tes TKBI
+                    </p>
+                    <p className="text-xs md:text-sm xl:text-base">
+                      08.00 , 12/03/2020
+                    </p>
+                  </div>
+                  <IconTime className="hidden sm:block" />
+                </div>
+                <div className="flex items-center w-full justify-between  px-4 py-2">
+                  <div className="text-green">
+                    <p className="font-bold text-xs md:text-sm xl:text-base">
+                      Waktu tes TKDA
+                    </p>
+                    <p className="text-xs md:text-sm xl:text-base">
+                      08.00 , 12/03/2020
+                    </p>
+                  </div>
+                  <IconTime className="hidden sm:block" />
+                </div>
+                <div className="flex items-center w-full justify-between  px-4 py-2">
+                  <div className="text-green">
+                    <p className="font-bold text-xs md:text-sm xl:text-base">
+                      Waktu tes Prodi
+                    </p>
+                    <p className="text-xs md:text-sm xl:text-base">
+                      08.00 , 12/03/2020
+                    </p>
+                  </div>
+                  <IconTime className="hidden sm:block" />
                 </div>
               </div>
-              <h1 className="mt-4 font-semibold text-green1 text-base xshome:text-xl xl:text-2xl">
-                Rahmat Hidayatullah
-              </h1>
-              <hr />
+              {/* image profile */}
+              <div className="w-full justify-center items-center flex-col flex order-1 sm:order-none">
+                <div className="w-32 h-32 border-2 rounded-2xl overflow-hidden">
+                  {/* here image */}
+                  <div className="relative h-full flex items-center">
+                    <img className="" src={image === "" ? IconHero : image} />
+                  </div>
+                </div>
+                <h1 className="mt-4 font-semibold text-green1 text-base xshome:text-xl xl:text-2xl">
+                  Rahmat Hidayatullah
+                </h1>
+                <hr />
+              </div>
             </div>
             {/* list identitas text */}
-            <div className="grid grid-cols-3 gap-2 xl:gap-8 mt-2 xl:mt-6 px-2 xl:px-10 text-xs xshome:text-sm xl:text-base">
+            <div className="grid grid-cols-3 gap-2 xl:gap-8 mt-2 xl:mt-12 px-2 text-xs xshome:text-sm xl:text-base">
               <div className="col-span-3 sm:col-span-1">
                 <div className="rounded-lg px-2 xl:px-6 py-3 text-white border bg-card">
                   <p className="font-bold">Nomor tes</p>
@@ -177,9 +215,9 @@ export default function Home() {
               </div>
             </div>
             {/* list waktu tes */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-8 mt-6 px-2 xl:px-10 text-xs xshome:text-sm xl:text-base">
+            <div className="grid grid-cols-2 gap-2 sm:gap-8 mt-6 px-2 text-xs xshome:text-sm xl:text-base">
               <div className="col-span-2 border sm:border-none sm:col-span-1">
-                <div className="flex items-center w-full justify-between shadow-lg px-4 py-2 rounded-lg">
+                <div className="flex items-center w-full justify-between shadow-lg px-4 py-2 rounded-lg border">
                   <div className="text-green">
                     <p className="font-bold">Waktu simulasi</p>
                     <p>08.00 , 12/03/2020</p>
@@ -188,7 +226,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="col-span-2 border sm:border-none sm:col-span-1">
-                <div className="flex items-center w-full justify-between shadow-lg px-4 py-2 rounded-lg">
+                <div className="flex items-center w-full justify-between shadow-lg px-4 py-2 rounded-lg border">
                   <div className="text-green">
                     <p className="font-bold">Waktu simulasi</p>
                     <p>08.00 , 12/03/2020</p>

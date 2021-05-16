@@ -38,7 +38,7 @@ module.exports = {
       },
       spacing: {
         "497px": "497px",
-        "52vh": "52vh",
+        "86vh": "86vh",
       },
       screens: {
         xshome: "438px",
