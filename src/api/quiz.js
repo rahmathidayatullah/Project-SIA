@@ -1,3 +1,8 @@
+// import axios from "axios";
+
+// import {config} from "../config";
+
+// get data quiz dummy
 import Image1 from "assets/icon/Untitled.png";
 import Image2 from "assets/icon/Untitled1.png";
 export const quizData = [
