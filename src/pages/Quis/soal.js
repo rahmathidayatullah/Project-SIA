@@ -26,7 +26,7 @@ export default function Soal() {
         className="p-4 overflow-y-scroll scroll-hidden"
         style={{ height: "77vh" }}
       >
-        <h1 className="font-bold">
+        <h1 className="font-semibold">
           {/* Pertanyaan 1 */}
           {id}.&nbsp;{quistion}
         </h1>
@@ -34,56 +34,53 @@ export default function Soal() {
         <div className="flex items-center flex-wrap mr-3 mt-4">
           {/* soal 2 */}
           <ul className="mb-6">
-            {pilihan === undefined
-              ? ""
-              : pilihan.map((item) => {
-                  return (
-                    <li>
-                      <div className="flex">
-                        <p style={{ width: "45rem" }}>{item.title}</p>
-                        <select>
-                          {item.option.map((items) => {
-                            return <option>{items}</option>;
-                          })}
-                        </select>
-                      </div>
-                    </li>
-                  );
-                })}
+            {pilihan &&
+              pilihan.map((item) => {
+                return (
+                  <li>
+                    <div className="flex">
+                      <p style={{ width: "45rem" }}>{item.title}</p>
+                      <select>
+                        {item.option.map((items) => {
+                          return <option>{items}</option>;
+                        })}
+                      </select>
+                    </div>
+                  </li>
+                );
+              })}
           </ul>
           {/* soal 9 */}
           <ul className="mb-6">
-            {checkbox === undefined
-              ? ""
-              : checkbox.map((item) => {
-                  return (
-                    <li>
-                      <div className="flex items-center">
-                        <input type="checkbox" className="mr-4" />
-                        <p>{item}</p>
-                      </div>
-                    </li>
-                  );
-                })}
+            {checkbox &&
+              checkbox.map((item) => {
+                return (
+                  <li>
+                    <div className="flex items-center">
+                      <input type="checkbox" className="mr-4" />
+                      <p>{item}</p>
+                    </div>
+                  </li>
+                );
+              })}
           </ul>
           {/* soal 3 */}
           <ul className="mb-6 w-full">
-            {esai === undefined
-              ? ""
-              : esai.map((item) => {
-                  return (
-                    <li>
-                      <div className="flex items-center">
-                        <p className="mr-4">Jawaban :</p>
-                        <input
-                          type="text"
-                          className="focus:outline-none outline-none border py-2 px-4 text-sm rounded-md w-1/2"
-                          placeholder={item.title}
-                        />
-                      </div>
-                    </li>
-                  );
-                })}
+            {esai &&
+              esai.map((item) => {
+                return (
+                  <li>
+                    <div className="flex items-center">
+                      <p className="mr-4">Jawaban :</p>
+                      <input
+                        type="text"
+                        className="focus:outline-none outline-none border py-2 px-4 text-sm rounded-md w-1/2"
+                        placeholder={item.title}
+                      />
+                    </div>
+                  </li>
+                );
+              })}
           </ul>
           {/* soal 1 */}
 
@@ -92,7 +89,6 @@ export default function Soal() {
               return (
                 <button
                   className={`rounded-lg text-xs 
-
                         ${
                           items.selected === true
                             ? "border-green1 border bg-green1 text-white"
@@ -106,19 +102,6 @@ export default function Soal() {
                 </button>
               );
             })}
-
-          {/* <button className="rounded-lg text-xs bg-green1 text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0">
-            <p>A. 316.000.000</p>
-          </button>
-          <button className="rounded-lg text-xs bg-white text-gray-600 border border-gray-400 p-2 mr-3 hover:bg-green1 duration-200 hover:text-white cursor-pointer mt-2 sm:mt-0">
-            <p>B. 214.000.000</p>
-          </button>
-          <button className="rounded-lg text-xs bg-white text-gray-600 border border-gray-400 p-2 mr-3 hover:bg-green1 duration-200 hover:text-white cursor-pointer mt-2 sm:mt-0">
-            <p>C. 214.000.000</p>
-          </button>
-          <button className="rounded-lg text-xs bg-white text-gray-600 border border-gray-400 p-2 hover:bg-green1 duration-200 hover:text-white cursor-pointer mt-2 sm:mt-0">
-            <p>D. 214.000.000</p>
-          </button> */}
         </div>
       </div>
       {/* wrap btn */}
@@ -139,7 +122,7 @@ export default function Soal() {
         </div>
         <div className="flex items-center order-1 sm:order-none mt-2 sm:mt-0">
           <p className="text-xs text-gray-600 mr-3">Progress</p>
-          <div className="w-48 h-6 rounded-2xl bg-white relative border overflow-hidden">
+          <div className="w-56 h-6 rounded-2xl bg-white relative border overflow-hidden">
             <div
               className="absolute inset-0 bg-green1 rounded-2xl"
               style={{
@@ -149,7 +132,7 @@ export default function Soal() {
               <p
                 className={`absolute ${
                   dataQuiz.totalSelect === 0 ? "text-green1" : "text-white"
-                } top-1/2 transform left-2 -translate-y-1/2 text-litle`}
+                } top-1/2 transform left-1 -translate-y-1/2 text-litle`}
               >
                 {dataQuiz.totalSelect === 0 ? (
                   <p>0%</p>

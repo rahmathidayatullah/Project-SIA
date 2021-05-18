@@ -120,7 +120,7 @@ export default function Quiz() {
                     setShowPengawas(showBantuan === false ? true : false)
                   }
                 >
-                  Cek pengawas
+                  Navigasi soal
                 </button>
               </div>
             </div>
@@ -155,6 +155,9 @@ export default function Quiz() {
             <div className="grid grid-cols-2 gap-2">
               <div className="col-span-1">
                 <div className="relative h-full">
+                  <p className="font-extrabold text-red-600 absolute right-3 text-6xl">
+                    !
+                  </p>
                   <img src={IconHero} />
                   <div className="absolute bottom-0 left-0 right-0 bg-green1 rounded-br-lg rounded-bl-lg">
                     <p className="text-white p-2 font-semibold text-xs">
