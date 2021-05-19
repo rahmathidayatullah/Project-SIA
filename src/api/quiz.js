@@ -5,6 +5,16 @@
 // get data quiz dummy
 import Image1 from "assets/icon/Untitled.png";
 import Image2 from "assets/icon/Untitled1.png";
+import S1 from "assets/icon/soal gambar/s1.png";
+import J1A from "assets/icon/soal gambar/j1a.png";
+import J1B from "assets/icon/soal gambar/j1b.png";
+import J1C from "assets/icon/soal gambar/j1c.png";
+import J1D from "assets/icon/soal gambar/j1d.png";
+import S2 from "assets/icon/soal gambar/s2.png";
+import J2A from "assets/icon/soal gambar/j2a.png";
+import J2B from "assets/icon/soal gambar/j2b.png";
+import J2C from "assets/icon/soal gambar/j2c.png";
+import J2D from "assets/icon/soal gambar/j2d.png";
 export const quizData = [
   {
     id: 1,
@@ -115,6 +125,56 @@ export const quizData = [
       "f. Dokumentasi Moodle ada di Domain Publik",
     ],
     option: [{ id: 1, title: "Submit", corret: true }],
+  },
+  {
+    id: 10,
+    quistion: "Contoh soal dimensi tiga",
+    image_desc:
+      "Jika gambar diatas diputar, manakah gambar di bawah ini yang identik dengan gambar sola dibawah. ",
+    img: S1,
+    option: [
+      { id: 1, title: "A", image: J1A, corret: true },
+      { id: 2, title: "B", image: J1B, corret: false },
+      { id: 2, title: "C", image: J1C, corret: false },
+      { id: 2, title: "D", image: J1D, corret: false },
+    ],
+  },
+  {
+    id: 11,
+    quistion: "Contoh soal dimensi tiga",
+    image_desc:
+      "Jika gambar diatas diputar, manakah gambar di bawah ini yang identik dengan gambar sola dibawah. ",
+    img: S2,
+    option: [
+      { id: 1, title: "A", image: J2A, corret: true },
+      { id: 2, title: "B", image: J2B, corret: false },
+      { id: 2, title: "C", image: J2C, corret: false },
+      { id: 2, title: "D", image: J2D, corret: false },
+    ],
+  },
+  {
+    id: 12,
+    titleVerbal: "Contoh soal verbal analogi",
+    quistion: "TANGAN : TUBUH = DAHAN : .....",
+    option: [
+      { id: 1, title: "A. Pohon", corret: true },
+      { id: 2, title: "B. Rindang", corret: false },
+      { id: 3, title: "C. Tangaki", corret: false },
+      { id: 4, title: "D. Daun", corret: false },
+      { id: 5, title: "D. Batang", corret: false },
+    ],
+  },
+  {
+    id: 13,
+    titleVerbal: "Contoh soal verbal analogi",
+    quistion: "GENTENG : RUMAH = BENANG : .....",
+    option: [
+      { id: 1, title: "A. Sutra", corret: true },
+      { id: 2, title: "B. Ulat", corret: false },
+      { id: 3, title: "C. Kapas", corret: false },
+      { id: 4, title: "D. Jahit", corret: false },
+      { id: 5, title: "D. Pakaian", corret: false },
+    ],
   },
   // {
   //   id: 2,

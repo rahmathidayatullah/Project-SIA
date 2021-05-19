@@ -20,6 +20,7 @@ export default function Home() {
   const capture = React.useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
+    setShowModal(false);
   }, [webcamRef]);
 
   const handleSaveImage = () => {
@@ -31,9 +32,10 @@ export default function Home() {
       {/* itersect */}
       {/* <img src={Intersect} className="absolute" /> */}
       {/* <img src={Intersect1} /> */}
+
       <Modal
         header={
-          <h1 className="absolute font-semibold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transform ">
+          <h1 className="absolute font-semibold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transform z-10">
             Verifikasi foto
           </h1>
         }
@@ -95,7 +97,7 @@ export default function Home() {
           </div>
 
           {/* many text */}
-          <div className="static lg:absolute top-1/2 transform-none lg:transform -translate-y-1/2 mt-5 sm:mt-3 lg:mt-0">
+          <div className="mt-10">
             <h1 className="text-base xshome:text-2xl xl:text-4xl text-white">
               <span className="font-semibold">Selamat datang&nbsp;</span>di, SIA
               !
@@ -128,10 +130,57 @@ export default function Home() {
               <li>3. Waktu ujjian akan dimulai ketika anda menekan Tombol </li>
             </ul>
           </div>
+          {/* describe tkba tkd prodi */}
+          <div
+            className="bg-white rounded-md mt-10
+          "
+          >
+            <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg pb-3 border-b">
+              <div className="text-green">
+                <p className="font-bold text-xs md:text-sm xl:text-base">
+                  Sesi tes TKBI
+                </p>
+                <p className="text-xs md:text-sm mt-2">
+                  Mulai pukul 08.00 , 12/03/2020
+                </p>
+                <p className="text-xs md:text-sm">Waktu tes : 20 Menit</p>
+              </div>
+              <IconTime className="hidden sm:block" />
+            </div>
+            <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg">
+              <div className="text-green">
+                <p className="font-bold text-xs md:text-sm xl:text-base">
+                  Sesi tes TKDA
+                </p>
+                <p className="text-xs md:text-sm mt-2">
+                  Mulai pukul 08.00 , 12/03/2020
+                </p>
+                <p className="text-xs md:text-sm">Waktu tes : 20 Menit</p>
+              </div>
+              <IconTime className="hidden sm:block" />
+            </div>
+            <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg">
+              <div className="text-green">
+                <p className="font-bold text-xs md:text-sm xl:text-base">
+                  Sesi tes PRODI
+                </p>
+                <p className="text-xs md:text-sm mt-2">
+                  Mulai pukul 08.00 , 12/03/2020
+                </p>
+                <p className="text-xs md:text-sm">Waktu tes : 20 Menit</p>
+              </div>
+              <IconTime className="hidden sm:block" />
+            </div>
+          </div>
         </div>
         <div className="col-span-12 lg:col-span-7 h-full overflow-y-scroll bg-white rounded-sm">
           <div className="p-4 h-full">
-            <div className="w-full flex justify-center items-center bg-orange py-2 xl:py-4 rounded-sm ">
+            {/* overlay validate camera */}
+            {image === "" && (
+              <div className="fixed inset-0 bg-black bg-opacity-80"></div>
+            )}
+
+            <div className="w-full flex justify-center items-center bg-orange py-2 xl:py-4 rounded-sm relative">
               <IconAlert className="mr-4 order-2 sm:order-none" />
               <h1 className="text-white text-litle xshome:text-sm xl:text-base order-1 sm:order-none pl-4 sm:pl-0">
                 Validasi foto anda sebelum mulai ujian,&nbsp;
@@ -144,46 +193,11 @@ export default function Home() {
               </h1>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between mt-8 mx-2 sm:mx-0">
-              <div className="w-full mt-4 sm:mt-0 sm:w-11/12 shadow-lg border rounded-lg order-2 sm:order-none">
-                <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg">
-                  <div className="text-green">
-                    <p className="font-bold text-xs md:text-sm xl:text-base">
-                      Waktu tes TKBI
-                    </p>
-                    <p className="text-xs md:text-sm xl:text-base">
-                      08.00 , 12/03/2020
-                    </p>
-                  </div>
-                  <IconTime className="hidden sm:block" />
-                </div>
-                <div className="flex items-center w-full justify-between  px-4 py-2">
-                  <div className="text-green">
-                    <p className="font-bold text-xs md:text-sm xl:text-base">
-                      Waktu tes TKDA
-                    </p>
-                    <p className="text-xs md:text-sm xl:text-base">
-                      08.00 , 12/03/2020
-                    </p>
-                  </div>
-                  <IconTime className="hidden sm:block" />
-                </div>
-                <div className="flex items-center w-full justify-between  px-4 py-2">
-                  <div className="text-green">
-                    <p className="font-bold text-xs md:text-sm xl:text-base">
-                      Waktu tes Prodi
-                    </p>
-                    <p className="text-xs md:text-sm xl:text-base">
-                      08.00 , 12/03/2020
-                    </p>
-                  </div>
-                  <IconTime className="hidden sm:block" />
-                </div>
-              </div>
               {/* image profile */}
               <div className="w-full justify-center items-center flex-col flex order-1 sm:order-none">
                 <div className="w-32 h-32 border-2 rounded-2xl overflow-hidden">
                   {/* here image */}
-                  <div className="relative h-full flex items-center">
+                  <div className="h-full flex items-center">
                     <img className="" src={image === "" ? IconHero : image} />
                   </div>
                 </div>
@@ -236,20 +250,22 @@ export default function Home() {
               </div>
             </div>
             {/* button */}
-            {image !== ""  && <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
-              <Link
-                to="/quis"
-                className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 9uration-200 text-center cursor-pointer"
-              >
-                Mulai Tes
-              </Link>
-              <Link
-                to="/quis"
-                className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer"
-              >
-                Mulai Simulasi
-              </Link>
-            </div>}
+            {image !== "" && (
+              <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
+                <Link
+                  to="/quis"
+                  className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 9uration-200 text-center cursor-pointer"
+                >
+                  Mulai Tes
+                </Link>
+                <Link
+                  to="/quis"
+                  className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer"
+                >
+                  Mulai Simulasi
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

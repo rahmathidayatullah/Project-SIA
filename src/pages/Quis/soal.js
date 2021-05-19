@@ -11,9 +11,17 @@ export default function Soal() {
   let dispatch = useDispatch();
   let dataQuiz = useSelector((state) => state.quiz);
   console.log("dataQuiz", dataQuiz.totalSelect);
-  const { id, img, quistion, option, pilihan, esai, checkbox } = useSelector(
-    (state) => state.quiz.data
-  );
+  const {
+    id,
+    img,
+    quistion,
+    option,
+    pilihan,
+    esai,
+    checkbox,
+    image_desc,
+    titleVerbal,
+  } = useSelector((state) => state.quiz.data);
 
   useEffect(() => {
     dispatch(fetchQuiz());
@@ -26,12 +34,21 @@ export default function Soal() {
         className="p-4 overflow-y-scroll scroll-hidden"
         style={{ height: "77vh" }}
       >
+        <h1 className="font-bold mb-4">{titleVerbal}</h1>
         <h1 className="font-semibold">
           {/* Pertanyaan 1 */}
           {id}.&nbsp;{quistion}
         </h1>
         <img className="mt-4" src={img} />
-        <div className="flex items-center flex-wrap mr-3 mt-4">
+        {/* validate when option ada image */}
+        {/* {option === undefined
+          ? ""
+          : option[0].image
+          ? "Jika gambar diatas diputar, manakah gambar di bawah ini yang identik dengan gambar sola dibawah. "
+          : ""} */}
+
+        <p>{image_desc}</p>
+        <div className="flex items-center flex-wrap mr-3">
           {/* soal 2 */}
           <ul className="mb-6">
             {pilihan &&
@@ -87,19 +104,22 @@ export default function Soal() {
           {option &&
             option.map((items, indexOption) => {
               return (
-                <button
-                  className={`rounded-lg text-xs 
-                        ${
-                          items.selected === true
-                            ? "border-green1 border bg-green1 text-white"
-                            : "bg-transparent text-green1 border-green1 border hover:bg-green1 hover:text-white"
-                        }
-
-                      p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none`}
-                  onClick={() => dispatch(selectOption(indexOption))}
-                >
-                  <p>{items.title}</p>
-                </button>
+                <div className="flex items-center flex-col">
+                  <img className="mr-3 mb-2" src={items.image} />
+                  <button
+                    className={`rounded-lg text-xs 
+                  ${
+                    items.selected === true
+                      ? "border-green1 border bg-green1 text-white"
+                      : "bg-transparent text-green1 border-green1 border hover:bg-green1 hover:text-white"
+                  }
+                        
+                        p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none`}
+                    onClick={() => dispatch(selectOption(indexOption))}
+                  >
+                    <p>{items.title}</p>
+                  </button>
+                </div>
               );
             })}
         </div>
