@@ -236,7 +236,7 @@ export default function Home() {
               </div>
             </div>
             {/* button */}
-            <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
+            {image !== ""  && <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
               <Link
                 to="/quis"
                 className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 9uration-200 text-center cursor-pointer"
@@ -249,7 +249,7 @@ export default function Home() {
               >
                 Mulai Simulasi
               </Link>
-            </div>
+            </div>}
           </div>
         </div>
       </div>
