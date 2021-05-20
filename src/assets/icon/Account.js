@@ -1,11 +1,12 @@
 import React from "react";
 
-export default function Account({ width, height, fill, className }) {
+export default function Account({ width, height, fill, className, onClick }) {
   return (
     <svg
       width={width}
       height={height}
       className={className}
+      onClick={onClick}
       viewBox="0 0 21 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

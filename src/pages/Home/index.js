@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import IconAccount from "assets/icon/Account";
 import IconAlert from "assets/icon/Alert";
 import IconTime from "assets/icon/Time";
@@ -7,10 +7,16 @@ import IconKamera from "assets/icon/Kamera";
 import IconCheck from "assets/icon/Check";
 import Modal from "components/Modal";
 import Webcam from "react-webcam";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
-  const [showModal, setShowModal] = React.useState(false);
+  let dispatch = useDispatch();
+  let history = useHistory();
+  const [toggleLogout, setToggleLogout] = useState("opacity-0");
+  const auth = useSelector((state) => state.auth);
+  console.log("auth", auth);
+  const [showModal, setShowModal] = React.useState();
   const webcamRef = React.useRef(null);
   const [image, setImage] = React.useState("");
   const [field, setField] = React.useState({
@@ -25,6 +31,12 @@ export default function Home() {
 
   const handleSaveImage = () => {
     setField({ ...field, image: image });
+  };
+
+  const logout = () => {
+    setToggleLogout("opacity-0");
+    localStorage.removeItem("auth");
+    history.push("/");
   };
 
   return (
@@ -91,8 +103,32 @@ export default function Home() {
               S<span className="font-normal">IA</span>
             </h1>
             <div className="flex items-center text-xs xshome:text-xl">
-              <p className="text-white mr-4">Rahmat Hidayatullah</p>
-              <IconAccount />
+              <p className="text-white mr-4">{auth.user.nama}</p>
+              <div className="relative">
+                <div
+                  className="hover:bg-gray-50 hover:bg-opacity-20 cursor-pointer duration-200 p-2"
+                  onClick={() =>
+                    setToggleLogout(
+                      toggleLogout === "opacity-0" ? "opacity-100" : "opacity-0"
+                    )
+                  }
+                >
+                  <IconAccount />
+                </div>
+                <ul
+                  className={`${toggleLogout} duration-200 absolute -bottom-12 right-0`}
+                >
+                  <li
+                    className="cursor-pointer duration-200 hover:bg-gray-50 px-4 py-2 bg-white text-gray-600"
+                    onClick={() => logout()}
+                  >
+                    <div className="flex items-center">
+                      <p className="text-sm">Logout</p>
+                      {/* icon logout */}
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 

@@ -2,12 +2,13 @@ import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import SwitchRoute from "components/SwitchRoute";
 import routes from "routes";
-// import { listen } from "app/listener";
+import { listen } from "app/listener";
+import { Redirect } from "react-router-dom";
 
 function App() {
-  // React.useEffect(() => {
-  //   listen();
-  // }, []);
+  React.useEffect(() => {
+    listen();
+  }, []);
   return (
     <React.Suspense
       fallback={

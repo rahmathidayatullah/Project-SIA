@@ -31,7 +31,7 @@ export default function Login() {
       } = await login(email, password);
       let { user, ujian, token } = data;
       console.log("user, ujian, token", user, ujian, token);
-      dispatch(userLogin(user, ujian, token));
+      dispatch(userLogin(token, user, ujian));
       history.push("/home");
     } catch (error) {
       let { message } = error.response.data;
