@@ -1,21 +1,20 @@
-import { USER_LOGIN, USER_LOGOUT } from './constants';
+import { USER_LOGIN, USER_LOGOUT } from "./constants";
 
-let initialState =
-  localStorage.getItem('auth')
-    ? JSON.parse(localStorage.getItem('auth'))
-    : { token: true, user: 'rahmat' }
+let initialState = localStorage.getItem("auth")
+  ? JSON.parse(localStorage.getItem("auth"))
+  : { token: null, user: null, ujian: null };
 
 export default function reducer(state = initialState, action) {
-
   switch (action.type) {
-
-    // (1) logika menangani action USER_LOGIN
     case USER_LOGIN:
-      return { token: action.token, access: action.user }
+      return {
+        token: action.token,
+        user: action.user,
+        ujian: action.ujian,
+      };
 
-    // (2) logika state `USER_LOGOUT`
     case USER_LOGOUT:
-      return { token: null, user: null }
+      return { token: null, user: null, ujian: null };
 
     default:
       return state;
