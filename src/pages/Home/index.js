@@ -20,7 +20,6 @@ export default function Home() {
   const [toggleLogout, setToggleLogout] = useState("opacity-0");
   const [showModal, setShowModal] = React.useState();
   const [modalLoad, setModalLoad] = useState(false);
-  console.log("modalLoad", modalLoad);
   const webcamRef = React.useRef(null);
   const [image, setImage] = React.useState("");
   const [field, setField] = React.useState({
