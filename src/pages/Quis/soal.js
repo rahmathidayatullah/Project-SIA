@@ -10,7 +10,6 @@ import {
 export default function Soal() {
   let dispatch = useDispatch();
   let dataQuiz = useSelector((state) => state.quiz);
-  console.log("dataQuiz", dataQuiz.totalSelect);
   const {
     id,
     img,

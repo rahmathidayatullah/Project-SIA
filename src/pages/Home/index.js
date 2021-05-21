@@ -1,22 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IconAccount from "assets/icon/Account";
 import IconAlert from "assets/icon/Alert";
 import IconTime from "assets/icon/Time";
-import IconHero from "assets/icon/ImageHero.svg";
+import IconHero from "assets/icon/rahmatpng.png";
 import IconKamera from "assets/icon/Kamera";
 import IconCheck from "assets/icon/Check";
 import Modal from "components/Modal";
 import Webcam from "react-webcam";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchDataHome, setTimeQuis } from "features/Home/action";
+import ReactLoading from "react-loading";
 
 export default function Home() {
   let dispatch = useDispatch();
-  let history = useHistory();
-  const [toggleLogout, setToggleLogout] = useState("opacity-0");
+  const history = useHistory();
   const auth = useSelector((state) => state.auth);
-  console.log("auth", auth);
+  const { user, ujian } = useSelector((state) => state.home.data);
+  const [toggleLogout, setToggleLogout] = useState("opacity-0");
   const [showModal, setShowModal] = React.useState();
+  const [modalLoad, setModalLoad] = useState(false);
+  console.log("modalLoad", modalLoad);
   const webcamRef = React.useRef(null);
   const [image, setImage] = React.useState("");
   const [field, setField] = React.useState({
@@ -26,12 +30,16 @@ export default function Home() {
   const capture = React.useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
-    setShowModal(false);
+    setModalLoad(true);
+    setTimeout(() => {
+      history.push("/quis");
+    }, 2500);
+    dispatch(setTimeQuis());
   }, [webcamRef]);
 
-  const handleSaveImage = () => {
-    setField({ ...field, image: image });
-  };
+  // const handleSaveImage = () => {
+  //   setField({ ...field, image: image });
+  // };
 
   const logout = () => {
     setToggleLogout("opacity-0");
@@ -39,11 +47,25 @@ export default function Home() {
     history.push("/");
   };
 
+  const verifikasiImage = () => {
+    setShowModal(true);
+  };
+
+  const closeModalMulti = () => {
+    setModalLoad(false);
+    setShowModal(true);
+  };
+
+  useEffect(() => {
+    dispatch(fetchDataHome());
+  }, []);
+
   return (
     <div className="w-screen lg:h-screen bg-home relative lg:p-4 overflow-y-scroll lg:overflow-hidden z-20">
       {/* itersect */}
       {/* <img src={Intersect} className="absolute" /> */}
       {/* <img src={Intersect1} /> */}
+      {/* modal verifikasi foto */}
 
       <Modal
         header={
@@ -52,38 +74,72 @@ export default function Home() {
           </h1>
         }
         show={showModal}
-        close={() => setShowModal(false)}
+        // close modal func 2 set state
+        close={() => closeModalMulti()}
         content={
           <div
             className="flex items-center justify-center pt-5 w-full"
             style={{ height: "35vh" }}
           >
             {/* here image */}
-            <div className="relative">
-              {/* <img src={IconHero} /> */}
-              <div className="d-flex flex-column wrapVideos">
-                <Webcam
-                  audio={false}
-                  height={420}
-                  ref={webcamRef}
-                  screenshotFormat="image/jpeg"
-                  width={"500"}
-                  mirrored={true}
-                />
+            {modalLoad === false ? (
+              <div className="relative">
+                {/* <img src={IconHero} /> */}
+                <div className="d-flex flex-column wrapVideos">
+                  <Webcam
+                    audio={false}
+                    height={420}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    width={"500"}
+                    mirrored={true}
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <ReactLoading
+                type={"cylon"}
+                color={"#B7BDC9"}
+                height={168}
+                width={120}
+              />
+            )}
           </div>
         }
         footer={
-          <div className="absolute left-0 bottom-0 flex items-center justify-between w-full p-4 border-t bg-white rounded-bl-lg rounded-br-lg">
-            <button
-              onClick={capture}
-              className="px-4 py-2 rounded-lg border bg-blue font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center focus:outline-none outline-none"
-            >
-              <IconKamera className="mr-2" />
-              <p>Ambil foto</p>
-            </button>
-            <button
+          <div className="absolute left-0 bottom-0 flex items-center justify-center w-full p-4 border-t bg-white rounded-bl-lg rounded-br-lg">
+            {modalLoad === false ? (
+              <button
+                onClick={capture}
+                className="px-4 py-2 rounded-lg border bg-blue font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center focus:outline-none outline-none"
+              >
+                <IconKamera className="mr-2" />
+                <p>Ambil foto</p>
+              </button>
+            ) : (
+              <button
+                onClick={capture}
+                className="px-4 py-2 rounded-lg border bg-blue font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center focus:outline-none outline-none"
+              >
+                <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Processing verifikasi foto
+              </button>
+            )}
+            {/* <button
               onClick={() => {
                 handleSaveImage();
               }}
@@ -91,11 +147,12 @@ export default function Home() {
             >
               <IconCheck className="mr-2" />
               <p>Selesai</p>
-            </button>
+            </button> */}
           </div>
         }
       />
-
+      {/* modal loading when verifikasi image */}
+      {/* <Modal content="tes" show={modalLoad} /> */}
       <div className="grid grid-cols-12  h-full">
         <div className="col-span-12 lg:col-span-5 h-full py-4 px-6 relative">
           <div className="flex items-center justify-between border-b-2 pb-2 sm:pb-0 sm:border-none">
@@ -177,9 +234,14 @@ export default function Home() {
                   Sesi tes TKBI
                 </p>
                 <p className="text-xs md:text-sm mt-2">
-                  Mulai pukul 08.00 , 12/03/2020
+                  Mulai pukul : {ujian && ujian.open_date}
                 </p>
-                <p className="text-xs md:text-sm">Waktu tes : 20 Menit</p>
+                <p className="text-xs md:text-sm">
+                  Berakhir pukul : {ujian && ujian.close_data}
+                </p>
+                <p className="text-xs md:text-sm">
+                  Waktu tes : {ujian && ujian.time_minutes} Menit
+                </p>
               </div>
               <IconTime className="hidden sm:block" />
             </div>
@@ -189,21 +251,31 @@ export default function Home() {
                   Sesi tes TKDA
                 </p>
                 <p className="text-xs md:text-sm mt-2">
-                  Mulai pukul 08.00 , 12/03/2020
+                  Mulai pukul : {ujian && ujian.open_date}
                 </p>
-                <p className="text-xs md:text-sm">Waktu tes : 20 Menit</p>
+                <p className="text-xs md:text-sm">
+                  Berakhir pukul : {ujian && ujian.close_data}
+                </p>
+                <p className="text-xs md:text-sm">
+                  Waktu tes : {ujian && ujian.time_minutes} Menit
+                </p>
               </div>
               <IconTime className="hidden sm:block" />
             </div>
             <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg">
               <div className="text-green">
                 <p className="font-bold text-xs md:text-sm xl:text-base">
-                  Sesi tes PRODI
+                  Sesi tes Prodi
                 </p>
                 <p className="text-xs md:text-sm mt-2">
-                  Mulai pukul 08.00 , 12/03/2020
+                  Mulai pukul : {ujian && ujian.open_date}
                 </p>
-                <p className="text-xs md:text-sm">Waktu tes : 20 Menit</p>
+                <p className="text-xs md:text-sm">
+                  Berakhir pukul : {ujian && ujian.close_data}
+                </p>
+                <p className="text-xs md:text-sm">
+                  Waktu tes : {ujian && ujian.time_minutes} Menit
+                </p>
               </div>
               <IconTime className="hidden sm:block" />
             </div>
@@ -212,11 +284,8 @@ export default function Home() {
         <div className="col-span-12 lg:col-span-7 h-full overflow-y-scroll bg-white rounded-sm">
           <div className="p-4 h-full">
             {/* overlay validate camera */}
-            {image === "" && (
-              <div className="fixed inset-0 bg-black bg-opacity-80"></div>
-            )}
 
-            <div className="w-full flex justify-center items-center bg-orange py-2 xl:py-4 rounded-sm relative">
+            {/* <div className="w-full flex justify-center items-center bg-orange py-2 xl:py-4 rounded-sm relative">
               <IconAlert className="mr-4 order-2 sm:order-none" />
               <h1 className="text-white text-litle xshome:text-sm xl:text-base order-1 sm:order-none pl-4 sm:pl-0">
                 Validasi foto anda sebelum mulai ujian,&nbsp;
@@ -227,24 +296,78 @@ export default function Home() {
                   klik untuk validasi
                 </span>
               </h1>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-between mt-8 mx-2 sm:mx-0">
+            </div> */}
+            <div className="flex flex-col sm:flex-row items-center justify-between mt-8 mx-2 sm:mx-0 w-full">
+              {/* card here */}
+              <div className="rounded-lg bg-gray-400 px-10 py-6 bg-opacity-5 w-full shadow-md">
+                <div className="grid gap-4 grid-cols-5">
+                  <div className="col-span-3">
+                    <div>
+                      <h1 className="text-2xl font-bold pb-2 border-b border-green1 border-opacity-30 text-gray-600 mb-4">
+                        {user && user.nama}
+                      </h1>
+
+                      <div>
+                        <p className="font-normal text-gray-500 text-sm tracking-widest">
+                          Email
+                        </p>
+                        <p className="font-semibold text-lg text-gray-500 tracking-widest leading-4">
+                          {user && user.email}
+                        </p>
+                      </div>
+                      <div className="mt-2">
+                        <p className="font-normal text-gray-500 text-sm tracking-widest">
+                          Jenis kelamin
+                        </p>
+                        <p className="font-semibold text-lg text-gray-500 tracking-widest">
+                          {user && user.jenis_kelamin === "L"
+                            ? "Laki -laki"
+                            : "Perempuan"}
+                        </p>
+                      </div>
+                      <div className="mt-2">
+                        <p className="font-normal text-gray-500 text-sm tracking-widest leading-4">
+                          Tanggal lahir
+                        </p>
+                        <p className="font-semibold text-gray-500 tracking-widest">
+                          {user && user.tanggal_lahir}
+                        </p>
+                      </div>
+                      <div className="mt-2">
+                        <p className="font-normal text-gray-500 text-sm tracking-widest leading-4">
+                          Nomor handphone
+                        </p>
+                        <p className="font-semibold text-gray-500 tracking-widest">
+                          {user && user.telepon}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="relative w-full h-full">
+                      <img
+                        className="w-full rounded-lg absolute right-5 -top-11"
+                        style={{ height: "135%" }}
+                        src={image === "" ? IconHero : image}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* image profile */}
-              <div className="w-full justify-center items-center flex-col flex order-1 sm:order-none">
+              {/* <div className="w-full justify-center items-center flex-col flex order-1 sm:order-none">
                 <div className="w-32 h-32 border-2 rounded-2xl overflow-hidden">
-                  {/* here image */}
                   <div className="h-full flex items-center">
                     <img className="" src={image === "" ? IconHero : image} />
                   </div>
                 </div>
-                <h1 className="mt-4 font-semibold text-green1 text-base xshome:text-xl xl:text-2xl">
-                  Rahmat Hidayatullah
-                </h1>
+
                 <hr />
-              </div>
+              </div> */}
             </div>
             {/* list identitas text */}
-            <div className="grid grid-cols-3 gap-2 xl:gap-8 mt-2 xl:mt-12 px-2 text-xs xshome:text-sm xl:text-base">
+            <div className="grid grid-cols-3 gap-2 xl:gap-8 mt-2 xl:mt-20 px-2 text-xs xshome:text-sm xl:text-base">
               <div className="col-span-3 sm:col-span-1">
                 <div className="rounded-lg px-2 xl:px-6 py-3 text-white border bg-card">
                   <p className="font-bold">Nomor tes</p>
@@ -286,22 +409,20 @@ export default function Home() {
               </div>
             </div>
             {/* button */}
-            {image !== "" && (
-              <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
-                <Link
-                  to="/quis"
-                  className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 9uration-200 text-center cursor-pointer"
-                >
-                  Mulai Tes
-                </Link>
-                <Link
-                  to="/quis"
-                  className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer"
-                >
-                  Mulai Simulasi
-                </Link>
-              </div>
-            )}
+            <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
+              {/* <Link
+                to="/quis"
+                className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 9uration-200 text-center cursor-pointer"
+              >
+                Mulai Tes
+              </Link> */}
+              <button
+                className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer outline-none focus:outline-none"
+                onClick={() => verifikasiImage()}
+              >
+                Mulai Ujian
+              </button>
+            </div>
           </div>
         </div>
       </div>

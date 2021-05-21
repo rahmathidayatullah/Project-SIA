@@ -9,6 +9,8 @@ import IconClose from "assets/icon/Close";
 import { useTimer } from "react-timer-hook";
 import Modal from "components/Modal";
 import { quizData } from "components/quiz/fakeData";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDataHome } from "features/Home/action";
 // component
 import Soal from "./soal";
 import NavigasiPengawas from "./navigasiPengawas";
@@ -16,18 +18,31 @@ import Bantuan from "./bantuan";
 import ModalTimeout from "./modal/timeout";
 
 export default function Quiz() {
+  let dispatch = useDispatch();
+  const { ujian } = useSelector((state) => state.home.data);
+  const timeQuis = useSelector((state) => state.home.timeQuis);
+
   // alert new tab
   // const valueAlert = () => {
   //   alert("tidak boleh buka tab baru !!");
   // };
 
+  // let data = ujian && ujian.time_minutes * 60;
+  // console.log("timeQuiz", data);
+
   // set time over
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 10);
+  // console.log("time", time);
+  time.setSeconds(time.getSeconds() + timeQuis);
+
+  // console.log("time", time);
+
   const { seconds, minutes, hours, start, restart } = useTimer({
     expiryTimestamp: time,
     onExpire: () => setIsShow(true),
   });
+
+  // console.log("seconds", seconds);
   // state massage bantuan
   const [showBantuan, setShowBantuan] = useState(false);
   const [showPengawas, setShowPengawas] = useState(false);
@@ -75,26 +90,32 @@ export default function Quiz() {
   };
 
   useEffect(() => {
-    // start();
+    start();
+    dispatch(fetchDataHome());
     // window.addEventListener("focus", valueAlert);
-  });
+  }, []);
   return (
-    <div className="bg-gray2 h-screen w-screen">
+    <div className="bg-gray2 h-screen w-screen p-2 overflow-y-hidden">
       {/* <div id="modalTimeOver"></div> */}
       {/* {isShow && timeOutQuiz()} */}
       <div className="grid grid-cols-12 gap-4 h-full relative w-full overflow-x-hidden">
         <div className="col-span-12 xl:col-span-8 h-full">
           {/* head */}
           <div className="p-2 bg-white rounded-lg">
-            <div className="flex flex-wrap justify-between border-b pb-2">
+            <div className="flex flex-wrap justify-between border-b pb-2 relative">
               <p className="font-semibold text-md mt-2 xsquis:mt-0">
                 Soal ujian
               </p>
+
+              <p className="font-semibold text-md mt-2 xsquis:mt-0 mt-2 border-b-4 border-gray-500">
+                Sesi TKDA
+              </p>
+
               <div className="flex flex-wrap items-center mt-2 xsquis:mt-0 mb-3 xsquis:mb-0">
                 <p className="text-orange text-sm mr-3 mt-2 xsquis:mt-0">
                   Sisa waktu
                 </p>
-                <div className="flex items-center text-sm pl-1 pr-3 py-1 rounded-md bg-orange text-white mr-2 xl:mr-0 mt-2 xsquis:mt-0">
+                <div className="flex items-center text-sm pl-1 pr-3 py-1 rounded-md bg-orange text-white mr-2 xl:mr-2 mt-2 xsquis:mt-0">
                   {/* icon time */}
                   <IconTime
                     width="19"
@@ -107,7 +128,7 @@ export default function Quiz() {
                   </p>
                 </div>
                 <button
-                  className="block xl:hidden text-sm px-2 py-1 rounded-md bg-green duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none mt-2 xsquis:mt-0 mr-2"
+                  className="text-sm px-2 py-1 rounded-md bg-green duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none mt-2 xsquis:mt-0 mr-2"
                   onClick={() =>
                     setShowBantuan(showBantuan === false ? true : false)
                   }
@@ -131,11 +152,11 @@ export default function Quiz() {
         </div>
         {/* check pengawas */}
         <div
-          className={`absolute xl:static  top-0  ${
+          className={`absolute xl:static top-0  ${
             showPengawas === false
               ? "right-250% xsquis:right-130% md:-right-full"
               : "right-0"
-          }  col-span-12 xl:static xl:col-span-4 bg-white xl:bg-auto max-w-xl xl:max-w-none h-screen xl:h-auto overflow-y-scroll border-2 xl:border-none duration-300`}
+          }  col-span-12 xl:static xl:col-span-4 bg-white xl:bg-auto max-w-xl xl:max-w-none h-screen xl:h-auto overflow-y-scroll border-2 xl:border-none duration-300 rounded-lg scroll-hidden`}
         >
           <div className="bg-white p-3 rounded-lg relative">
             {/* <div
@@ -189,11 +210,11 @@ export default function Quiz() {
 
         {/* Bantuan */}
         <div
-          className={`absolute xl:static  top-0  ${
+          className={`absolute top-0  ${
             showBantuan === false
               ? "right-250% xsquis:right-130% md:-right-full"
               : "right-0"
-          }  col-span-12 xl:static xl:col-span-4 bg-white xl:bg-auto max-w-xl xl:max-w-none h-screen xl:h-auto overflow-y-scroll border-2 xl:border-none duration-300`}
+          }  col-span-12 xl:col-span-4 bg-white xl:bg-auto max-w-xl xl:max-w-none h-screen overflow-y-scroll scroll-hidden border-2 xl:border duration-300`}
         >
           <div className="bg-white p-3 rounded-lg mt-3">
             <div className="pb-3 border-b flex items-center justify-between">
@@ -204,7 +225,7 @@ export default function Quiz() {
                 </p>
               </div>
               <button
-                className="bg-blue text-white rounded-lg px-3 py-1 text-sm outline-none focus:outline-none duration-200 hover:bg-opacity-80 block xl:hidden"
+                className="bg-blue text-white rounded-lg px-3 py-1 text-sm outline-none focus:outline-none duration-200 hover:bg-opacity-80"
                 onClick={() => setShowBantuan(false)}
               >
                 Close

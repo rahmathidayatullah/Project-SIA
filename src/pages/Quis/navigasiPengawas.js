@@ -7,9 +7,6 @@ export default function NavigasiPengawas() {
   const navigasi = useSelector((state) => state.quiz.allData);
   let dataQuiz = useSelector((state) => state.quiz);
 
-  console.log("navigasi", navigasi);
-  console.log("quiz", dataQuiz.currentIndex);
-
   useEffect(() => {
     dispatch(fetchQuiz());
   }, [dispatch, dataQuiz.currentIndex]);
