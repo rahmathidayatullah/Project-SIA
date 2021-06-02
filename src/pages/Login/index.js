@@ -29,13 +29,14 @@ export default function Login() {
       const {
         data: { data },
       } = await login(email, password);
-      let { user, ujian, token } = data;
-      console.log("user, ujian, token", user, ujian, token);
-      dispatch(userLogin(token, user, ujian));
+      let { user, sesi_ujian, token } = data;
+      console.log("user, ujian, token", user, sesi_ujian, token);
+      dispatch(userLogin(token, user, sesi_ujian));
       history.push("/home");
     } catch (error) {
       let { message } = error.response.data;
       setError(message);
+      console.log("error", error.response);
       // history.push("/");
     }
   };

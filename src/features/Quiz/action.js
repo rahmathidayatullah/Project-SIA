@@ -6,6 +6,7 @@ import {
   NEXT_PAGE,
   SELECT_OPTION,
   CHANGE_CURRENT_INDEX,
+  SENT_TIME_QUIS,
 } from "./constants";
 
 import { quizData } from "api/quiz";
@@ -131,5 +132,14 @@ export const changeCurrentIndex = (i) => {
   return {
     type: CHANGE_CURRENT_INDEX,
     i,
+  };
+};
+
+export const sendTimeQuis = (seconds, minutes, hours) => {
+  return (dispatch, getState) => {
+    let [{ detik, menit, jam }] = getState().quiz.timeQuis;
+
+    if (detik && menit && jam === 0) {
+    }
   };
 };

@@ -3,6 +3,7 @@ import {
   ERROR_FETCHING_DATA,
   SUCCESS_FETCHING_DATA,
   SUCCESS_SET_TIME_QUIS,
+  SUCCESS_GET_STATUS_UJIAN,
 } from "./constans";
 
 const statuslist = {
@@ -16,6 +17,7 @@ const initialState = {
   data: [],
   status: statuslist.idle,
   timeQuis: 0,
+  isUjian: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -39,6 +41,9 @@ export default function reducer(state = initialState, action) {
 
     case SUCCESS_SET_TIME_QUIS:
       return { ...state, timeQuis: action.value * 60 };
+
+    case SUCCESS_GET_STATUS_UJIAN:
+      return { ...state, isUjian: action.data };
 
     default:
       return state;

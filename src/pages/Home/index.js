@@ -9,19 +9,37 @@ import Modal from "components/Modal";
 import Webcam from "react-webcam";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDataHome, setTimeQuis } from "features/Home/action";
+import {
+  fetchDataHome,
+  setTimeQuis,
+  statusUjianGet,
+} from "features/Home/action";
 import ReactLoading from "react-loading";
+import { sendImage } from "api/home";
+//
+import { useForm } from "react-hook-form";
 
 export default function Home() {
   let dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
-  const { user, ujian } = useSelector((state) => state.home.data);
+  const { user, sesi_ujian } = useSelector((state) => state.home.data);
+  const { isUjian } = useSelector((state) => state.home);
   const [toggleLogout, setToggleLogout] = useState("opacity-0");
   const [showModal, setShowModal] = React.useState();
   const [modalLoad, setModalLoad] = useState(false);
   const webcamRef = React.useRef(null);
   const [image, setImage] = React.useState("");
+  const [indexSesiQuis, setIndexSesiQuis] = useState(0);
+
+  const { register, handleSubmit, errors, setError } = useForm();
+
+  const onSubmit = async (data) => {
+    let image = data.image[0];
+
+    const formData = new FormData();
+    console.log("dataaaaaaaaa", image);
+  };
   const [field, setField] = React.useState({
     image: "",
   });
@@ -30,9 +48,19 @@ export default function Home() {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
     setModalLoad(true);
-    setTimeout(() => {
-      history.push("/quis");
-    }, 2500);
+
+    console.log("indexSesiQuis", indexSesiQuis);
+    try {
+      console.log("berhasil get api");
+      let { data } = await sendImage(indexSesiQuis, imageSrc);
+      console.log("data response success", data);
+      setTimeout(() => {
+        history.push("/quis");
+      }, 2500);
+    } catch (error) {
+      console.log("gagal get response 1", error);
+      console.log("gagal get response 2", error.response);
+    }
     dispatch(setTimeQuis());
   }, [webcamRef]);
 
@@ -46,17 +74,26 @@ export default function Home() {
     history.push("/");
   };
 
-  const verifikasiImage = () => {
-    setShowModal(true);
+  const verifikasiImage = (id_sesi_ujian, index) => {
+    if (isUjian === false) {
+      alert("Ujian belum dimulai");
+    } else {
+      setShowModal(true);
+      console.log("id_sesi_ujian", id_sesi_ujian);
+      dispatch(statusUjianGet(id_sesi_ujian));
+      setIndexSesiQuis(index);
+    }
   };
 
   const closeModalMulti = () => {
     setModalLoad(false);
-    setShowModal(true);
+    // setShowModal(true);
+    setShowModal(false);
   };
 
   useEffect(() => {
     dispatch(fetchDataHome());
+    dispatch(statusUjianGet());
   }, []);
 
   return (
@@ -120,17 +157,18 @@ export default function Home() {
                 onClick={capture}
                 className="px-4 py-2 rounded-lg border bg-blue font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center focus:outline-none outline-none"
               >
-                <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
                   <circle
-                    class="opacity-25"
+                    className="opacity-25"
                     cx="12"
                     cy="12"
                     r="10"
                     stroke="currentColor"
-                    stroke-width="4"
+                    strokeWidth="4"
+                    // stroke-width="4"
                   ></circle>
                   <path
-                    class="opacity-75"
+                    className="opacity-75"
                     fill="currentColor"
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
@@ -159,7 +197,7 @@ export default function Home() {
               S<span className="font-normal">IA</span>
             </h1>
             <div className="flex items-center text-xs xshome:text-xl">
-              <p className="text-white mr-4">{auth.user.nama}</p>
+              <p className="text-white mr-4">{auth.user && auth.user.nama}</p>
               <div className="relative">
                 <div
                   className="hover:bg-gray-50 hover:bg-opacity-20 cursor-pointer duration-200 p-2"
@@ -227,57 +265,40 @@ export default function Home() {
             className="bg-white rounded-md mt-10
           "
           >
-            <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg pb-3 border-b">
-              <div className="text-green">
-                <p className="font-bold text-xs md:text-sm xl:text-base">
-                  Sesi tes TKBI
-                </p>
-                <p className="text-xs md:text-sm mt-2">
-                  Mulai pukul : {ujian && ujian.open_date}
-                </p>
-                <p className="text-xs md:text-sm">
-                  Berakhir pukul : {ujian && ujian.close_data}
-                </p>
-                <p className="text-xs md:text-sm">
-                  Waktu tes : {ujian && ujian.time_minutes} Menit
-                </p>
-              </div>
-              <IconTime className="hidden sm:block" />
-            </div>
-            <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg">
-              <div className="text-green">
-                <p className="font-bold text-xs md:text-sm xl:text-base">
-                  Sesi tes TKDA
-                </p>
-                <p className="text-xs md:text-sm mt-2">
-                  Mulai pukul : {ujian && ujian.open_date}
-                </p>
-                <p className="text-xs md:text-sm">
-                  Berakhir pukul : {ujian && ujian.close_data}
-                </p>
-                <p className="text-xs md:text-sm">
-                  Waktu tes : {ujian && ujian.time_minutes} Menit
-                </p>
-              </div>
-              <IconTime className="hidden sm:block" />
-            </div>
-            <div className="flex items-center w-full justify-between px-4 py-2 rounded-lg">
-              <div className="text-green">
-                <p className="font-bold text-xs md:text-sm xl:text-base">
-                  Sesi tes Prodi
-                </p>
-                <p className="text-xs md:text-sm mt-2">
-                  Mulai pukul : {ujian && ujian.open_date}
-                </p>
-                <p className="text-xs md:text-sm">
-                  Berakhir pukul : {ujian && ujian.close_data}
-                </p>
-                <p className="text-xs md:text-sm">
-                  Waktu tes : {ujian && ujian.time_minutes} Menit
-                </p>
-              </div>
-              <IconTime className="hidden sm:block" />
-            </div>
+            {/* here looping */}
+            {sesi_ujian &&
+              sesi_ujian.map((items, i) => {
+                return (
+                  <div
+                    className="flex items-center w-full justify-between px-4 py-2 rounded-lg pb-3 border-b"
+                    key={i}
+                  >
+                    <div className="text-green">
+                      <p className="font-bold text-xs md:text-sm xl:text-base">
+                        Sesi tes {items.nama_sesi_ujian}
+                      </p>
+                      <p className="text-xs md:text-sm mt-2">
+                        Mulai pukul : {items.waktu_mulai}
+                      </p>
+                      <p className="text-xs md:text-sm">
+                        Berakhir pukul : {items.waktu_selesai}
+                      </p>
+                      <p className="text-xs md:text-sm">
+                        Waktu tes : {items.waktu_tes} Menit
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <IconTime className="hidden sm:block" />
+                      <button
+                        className="mt-2 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer outline-none focus:outline-none"
+                        onClick={() => verifikasiImage(items.id_sesi_ujian, i)}
+                      >
+                        Mulai Ujian
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
           </div>
         </div>
         <div className="col-span-12 lg:col-span-7 h-full overflow-y-scroll bg-white rounded-sm">
@@ -344,11 +365,11 @@ export default function Home() {
                   </div>
                   <div className="col-span-2">
                     <div className="relative w-full h-full">
-                      <img
+                      {/* <img
                         className="w-full rounded-lg absolute right-5 -top-11"
                         style={{ height: "135%" }}
                         src={image === "" ? IconHero : image}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -366,7 +387,7 @@ export default function Home() {
               </div> */}
             </div>
             {/* list identitas text */}
-            <div className="grid grid-cols-3 gap-2 xl:gap-8 mt-2 xl:mt-20 px-2 text-xs xshome:text-sm xl:text-base">
+            {/* <div className="grid grid-cols-3 gap-2 xl:gap-8 mt-2 xl:mt-20 px-2 text-xs xshome:text-sm xl:text-base">
               <div className="col-span-3 sm:col-span-1">
                 <div className="rounded-lg px-2 xl:px-6 py-3 text-white border bg-card">
                   <p className="font-bold">Nomor tes</p>
@@ -385,9 +406,9 @@ export default function Home() {
                   <p>0232893434232</p>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* list waktu tes */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-8 mt-6 px-2 text-xs xshome:text-sm xl:text-base">
+            {/* <div className="grid grid-cols-2 gap-2 sm:gap-8 mt-6 px-2 text-xs xshome:text-sm xl:text-base">
               <div className="col-span-2 border sm:border-none sm:col-span-1">
                 <div className="flex items-center w-full justify-between shadow-lg px-4 py-2 rounded-lg border">
                   <div className="text-green">
@@ -406,7 +427,7 @@ export default function Home() {
                   <IconTime />
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* button */}
             <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
               {/* <Link
@@ -415,12 +436,26 @@ export default function Home() {
               >
                 Mulai Tes
               </Link> */}
+
               <button
-                className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer outline-none focus:outline-none"
-                onClick={() => verifikasiImage()}
+                className="px-6 py-2 rounded-lg bg-blue opacity-50 text-white hover:bg-opacity-80 duration-200 text-center cursor-not-allowed outline-none focus:outline-none"
+                disabled
               >
-                Mulai Ujian
+                Mulai Simulasi
               </button>
+
+              {/* <form onSubmit={handleSubmit(onSubmit)}>
+                <input
+                  className="w-full  mt-3 p-2 border border-gray-200 left-0 rounded-md focus:outline-none"
+                  placeholder="Nama"
+                  type="file"
+                  {...register("image")}
+                />
+                <button
+                  className="mt-3 p-2 bg-green-500 text-white focus:outline-none flex items-center w-full justify-center rounded-md font-bold"
+                  type="submit"
+                ></button>
+              </form> */}
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import {
   NEXT_PAGE,
   SELECT_OPTION,
   CHANGE_CURRENT_INDEX,
+  SENT_TIME_QUIS,
 } from "./constants";
 
 const statuslist = {
@@ -33,6 +34,8 @@ const initialState = {
   totalAnswer: 0,
   // count noAnwer
   totalNoAnswer: 0,
+  // set time quis
+  timeQuis: [{ detik: 0, menit: 0, jam: 0 }],
 };
 
 export default function reducer(state = initialState, action) {
@@ -89,6 +92,12 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         currentIndex: action.i,
+      };
+
+    case SENT_TIME_QUIS:
+      return {
+        ...state,
+        timeQuis: action.value,
       };
 
     default:

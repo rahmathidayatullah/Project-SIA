@@ -3,9 +3,10 @@ import {
   ERROR_FETCHING_DATA,
   SUCCESS_FETCHING_DATA,
   SUCCESS_SET_TIME_QUIS,
+  SUCCESS_GET_STATUS_UJIAN,
 } from "./constans";
 
-import { getDataUjian } from "api/home";
+import { getDataUjian, getStatusUjian } from "api/home";
 
 export const fetchDataHome = () => {
   return async (dispatch, getState) => {
@@ -14,6 +15,7 @@ export const fetchDataHome = () => {
       let {
         data: { data },
       } = await getDataUjian();
+      console.log("dataasssssssssssssssssssss", data);
       dispatch(successFetchHome(data));
     } catch (error) {
       console.log(error);
@@ -58,5 +60,26 @@ export const succestSetTimeQuis = (value) => {
   return {
     type: SUCCESS_SET_TIME_QUIS,
     value,
+  };
+};
+
+export const statusUjianGet = (id) => {
+  return async (dispatch) => {
+    try {
+      let {
+        data: { data },
+      } = await getStatusUjian(id);
+      console.log("data", data);
+      dispatch(succesStatusUjianGet(data));
+    } catch (error) {
+      console.log("ujian redux error", error);
+    }
+  };
+};
+
+export const succesStatusUjianGet = (data) => {
+  return {
+    type: SUCCESS_GET_STATUS_UJIAN,
+    data,
   };
 };

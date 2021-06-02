@@ -50,6 +50,9 @@ export default function NavigasiPengawas() {
             {navigasi.map((item, i) => {
               return (
                 <button
+                  // update
+                  key={i}
+                  // update
                   className={`col-span-1 rounded-lg 
                   ${
                     i === dataQuiz.currentIndex

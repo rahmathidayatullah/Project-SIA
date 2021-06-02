@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Sound from "react-sound";
+import SoundTrack from "assets/audio/tes.mp3";
+
 import {
   fetchQuiz,
   goToNextPage,
@@ -7,7 +10,14 @@ import {
   selectOption,
 } from "features/Quiz/action";
 
-export default function Soal() {
+export default function Soal(
+  handleSongLoading,
+  handleSongPlaying,
+  handleSongFinishedPlaying
+) {
+  // tes audio
+
+  const [isPlaying, setIsPlaying] = useState(false);
   let dispatch = useDispatch();
   let dataQuiz = useSelector((state) => state.quiz);
   const {
@@ -38,6 +48,17 @@ export default function Soal() {
           {/* Pertanyaan 1 */}
           {id}.&nbsp;{quistion}
         </h1>
+        <button onClick={() => setIsPlaying(!isPlaying)}>
+          {!isPlaying ? "Play" : "Stop"}
+        </button>
+        <Sound
+          url={SoundTrack}
+          playStatus={isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED}
+          playFromPosition={3000}
+          onLoading={handleSongLoading}
+          onPlaying={handleSongPlaying}
+          onFinishedPlaying={handleSongFinishedPlaying}
+        />
         <img className="mt-4" src={img} />
         {/* validate when option ada image */}
         {/* {option === undefined
@@ -51,9 +72,13 @@ export default function Soal() {
           {/* soal 2 */}
           <ul className="mb-6">
             {pilihan &&
-              pilihan.map((item) => {
+              pilihan.map((item, i) => {
                 return (
-                  <li>
+                  <li
+                    // update
+                    key={i}
+                    // update
+                  >
                     <div className="flex">
                       <p style={{ width: "45rem" }}>{item.title}</p>
                       <select>

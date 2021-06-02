@@ -10,17 +10,25 @@ import { useTimer } from "react-timer-hook";
 import Modal from "components/Modal";
 import { quizData } from "components/quiz/fakeData";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { fetchDataHome } from "features/Home/action";
+import { sendTimeQuis } from "features/Quiz/action";
 // component
 import Soal from "./soal";
 import NavigasiPengawas from "./navigasiPengawas";
 import Bantuan from "./bantuan";
 import ModalTimeout from "./modal/timeout";
 
+// time
+import { GetTime } from "utils/getTime";
+
 export default function Quiz() {
   let dispatch = useDispatch();
+  let history = useHistory();
   const { ujian } = useSelector((state) => state.home.data);
   const timeQuis = useSelector((state) => state.home.timeQuis);
+
+  GetTime();
 
   // alert new tab
   // const valueAlert = () => {
@@ -33,7 +41,7 @@ export default function Quiz() {
   // set time over
   const time = new Date();
   // console.log("time", time);
-  time.setSeconds(time.getSeconds() + timeQuis);
+  time.setSeconds(time.getSeconds() + 300);
 
   // console.log("time", time);
 
@@ -41,6 +49,9 @@ export default function Quiz() {
     expiryTimestamp: time,
     onExpire: () => setIsShow(true),
   });
+
+  let dataTime = [{ detik: seconds, menit: minutes, jam: hours }];
+  localStorage.setItem("time_quis", JSON.stringify(dataTime));
 
   // console.log("seconds", seconds);
   // state massage bantuan
@@ -66,32 +77,18 @@ export default function Quiz() {
   // close modal
   const closeModal = () => {
     setIsShow(false);
+    // history.push("/home");
     // restart(time);
   };
   const timeOutQuiz = () => {
-    return (
-      <Modal
-        show={isShow}
-        close={closeModal}
-        header={
-          <h1 className="absolute left-1/2 transform -translate-x-1/2">
-            Modal title
-          </h1>
-        }
-        content={
-          <div className="pt-5">
-            <h1 className="text-center font-semibold">
-              Waktu anda telah habis
-            </h1>
-          </div>
-        }
-      />
-    );
+    return "as";
   };
 
   useEffect(() => {
     start();
     dispatch(fetchDataHome());
+    // send data action time quis
+    dispatch(sendTimeQuis(seconds, minutes, hours));
     // window.addEventListener("focus", valueAlert);
   }, []);
   return (
@@ -322,6 +319,31 @@ export default function Quiz() {
             </button>
           </div>
         </div>
+        {/* timeout */}
+        <Modal
+          show={isShow}
+          close={closeModal}
+          header={
+            <h1 className="absolute left-1/2 transform -translate-x-1/2">
+              Modal title
+            </h1>
+          }
+          content={
+            <div className="absolute inset-0 z-10">
+              <h1 className="text-center font-semibold left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 absolute w-full">
+                Waktu anda telah habis
+              </h1>
+              <footer className="absolute bottom-0 w-full left-0 border-t flex justify-center pb-2">
+                <button
+                  className="mt-2 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer outline-none focus:outline-none"
+                  onClick={() => history.push("/home")}
+                >
+                  Kembali ke halaman utama
+                </button>
+              </footer>
+            </div>
+          }
+        />
       </div>
     </div>
   );

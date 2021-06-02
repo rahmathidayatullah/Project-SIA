@@ -13,13 +13,13 @@ export default function Modal({ show, close, header, content, footer }) {
         style={{ maxHeight: "100vh" }}
       >
         {/* head */}
-        <div className="flex items-center justify-between p-4 border-b relative z-10 bg-white rounded-tr-lg rounded-tl-lg">
+        <div className="flex items-center justify-between p-4 border-b relative z-10 bg-white rounded-tr-lg rounded-tl-lg z-50">
           {header}
           <IconClose onClick={close} />
         </div>
 
         {/* body */}
-        <div>{content}</div>
+        {content}
         {/* foot */}
         {footer}
       </div>
