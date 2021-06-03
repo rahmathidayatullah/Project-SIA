@@ -18,6 +18,7 @@ const initialState = {
   status: statuslist.idle,
   timeQuis: 0,
   isUjian: false,
+  id_ujian: 0,
 };
 
 export default function reducer(state = initialState, action) {
@@ -43,7 +44,7 @@ export default function reducer(state = initialState, action) {
       return { ...state, timeQuis: action.value * 60 };
 
     case SUCCESS_GET_STATUS_UJIAN:
-      return { ...state, isUjian: action.data };
+      return { ...state, isUjian: action.data, id_ujian: action.id_ujian };
 
     default:
       return state;

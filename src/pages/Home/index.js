@@ -5,8 +5,11 @@ import IconTime from "assets/icon/Time";
 import IconHero from "assets/icon/rahmatpng.png";
 import IconKamera from "assets/icon/Kamera";
 import IconCheck from "assets/icon/Check";
+import Intersect from "assets/icon/Intersect.svg";
+import Intersect1 from "assets/icon/Intersect (1).svg";
 import Modal from "components/Modal";
 import Webcam from "react-webcam";
+
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,6 +21,11 @@ import ReactLoading from "react-loading";
 import { sendImage } from "api/home";
 //
 import { useForm } from "react-hook-form";
+import IconFemale from "assets/icon/Female";
+import IconMale from "assets/icon/Male";
+import IconTanggal from "assets/icon/Tanggal";
+import IconPager from "assets/icon/Pager";
+import IconPhone from "assets/icon/Phone";
 
 export default function Home() {
   let dispatch = useDispatch();
@@ -97,10 +105,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-screen lg:h-screen bg-home relative lg:p-4 overflow-y-scroll lg:overflow-hidden z-20">
+    <div className="w-screen lg:h-screen bg-home relative lg:p-0 overflow-y-scroll lg:overflow-hidden z-20">
       {/* itersect */}
-      {/* <img src={Intersect} className="absolute" /> */}
-      {/* <img src={Intersect1} /> */}
+      <img src={Intersect} className="absolute" />
+      <img src={Intersect1} className="absolute" />
       {/* modal verifikasi foto */}
 
       <Modal
@@ -190,7 +198,7 @@ export default function Home() {
       />
       {/* modal loading when verifikasi image */}
       {/* <Modal content="tes" show={modalLoad} /> */}
-      <div className="grid grid-cols-12  h-full">
+      <div className="grid grid-cols-12  h-full relative z-40">
         <div className="col-span-12 lg:col-span-5 h-full py-4 px-6 relative">
           <div className="flex items-center justify-between border-b-2 pb-2 sm:pb-0 sm:border-none">
             <h1 className="font-bold text-white text-2xl">
@@ -218,17 +226,14 @@ export default function Home() {
                   >
                     <div className="flex items-center">
                       <p className="text-sm">Logout</p>
-                      {/* icon logout */}
                     </div>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
-
-          {/* many text */}
-          <div className="mt-10">
-            <h1 className="text-base xshome:text-2xl xl:text-4xl text-white">
+          <div className="relative xl:absolute  top-1/2 transform -translate-y-1/2">
+            <h1 className="text-2xl xl:text-4xl text-white">
               <span className="font-semibold">Selamat datang&nbsp;</span>di, SIA
               !
             </h1>
@@ -241,221 +246,132 @@ export default function Home() {
             border-white
              text-white
              text-xs 
-             xshome:text-sm 
+             xshome:text-lg 
               xl:text-base"
             >
               berikut adalah panduan ujian{" "}
             </h2>
-            <ul className="mt-4 text-white text-litle xshome:text-xs xl:text-base">
+            <ul
+              className="mt-4 text-white text-xs 
+             xshome:text-lg 
+              xl:text-base"
+            >
               <li>1. Berdoalah sebelum mengejakan</li>
-              <li>2. Peraturan :</li>
-              <li>
+              <li className="mt-2">2. Peraturan :</li>
+              <li className="mt-2">
                 &nbsp;&nbsp;&nbsp;&nbsp;A. Ujian akan berlangsung dengan
                 pantauan
               </li>
-              <li>
+              <li className="mt-2">
                 &nbsp;&nbsp;&nbsp;&nbsp;B. Dilarang melakukan kecurangan dalam
                 bentuk apapun
               </li>
-              <li>3. Waktu ujjian akan dimulai ketika anda menekan Tombol </li>
+              <li className="mt-2">
+                3. Waktu ujjian akan dimulai ketika anda menekan Tombol{" "}
+              </li>
             </ul>
           </div>
-          {/* describe tkba tkd prodi */}
-          <div
-            className="bg-white rounded-md mt-10
-          "
-          >
-            {/* here looping */}
-            {sesi_ujian &&
-              sesi_ujian.map((items, i) => {
-                return (
-                  <div
-                    className="flex items-center w-full justify-between px-4 py-2 rounded-lg pb-3 border-b"
-                    key={i}
-                  >
-                    <div className="text-green">
-                      <p className="font-bold text-xs md:text-sm xl:text-base">
-                        Sesi tes {items.nama_sesi_ujian}
-                      </p>
-                      <p className="text-xs md:text-sm mt-2">
-                        Mulai pukul : {items.waktu_mulai}
-                      </p>
-                      <p className="text-xs md:text-sm">
-                        Berakhir pukul : {items.waktu_selesai}
-                      </p>
-                      <p className="text-xs md:text-sm">
-                        Waktu tes : {items.waktu_tes} Menit
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <IconTime className="hidden sm:block" />
-                      <button
-                        className="mt-2 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer outline-none focus:outline-none"
-                        onClick={() => verifikasiImage(items.id_sesi_ujian, i)}
-                      >
-                        Mulai Ujian
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
         </div>
-        <div className="col-span-12 lg:col-span-7 h-full overflow-y-scroll bg-white rounded-sm">
-          <div className="p-4 h-full">
-            {/* overlay validate camera */}
-
-            {/* <div className="w-full flex justify-center items-center bg-orange py-2 xl:py-4 rounded-sm relative">
-              <IconAlert className="mr-4 order-2 sm:order-none" />
-              <h1 className="text-white text-litle xshome:text-sm xl:text-base order-1 sm:order-none pl-4 sm:pl-0">
-                Validasi foto anda sebelum mulai ujian,&nbsp;
-                <span
-                  className="font-semibold cursor-pointer border-b border-transparent hover:border-white duration-150"
-                  onClick={() => setShowModal(true)}
-                >
-                  klik untuk validasi
-                </span>
-              </h1>
-            </div> */}
-            <div className="flex flex-col sm:flex-row items-center justify-between mt-8 mx-2 sm:mx-0 w-full">
-              {/* card here */}
-              <div className="rounded-lg bg-gray-400 px-10 py-6 bg-opacity-5 w-full shadow-md">
-                <div className="grid gap-4 grid-cols-5">
-                  <div className="col-span-3">
-                    <div>
-                      <h1 className="text-2xl font-bold pb-2 border-b border-green1 border-opacity-30 text-gray-600 mb-4">
-                        {user && user.nama}
-                      </h1>
-
-                      <div>
-                        <p className="font-normal text-gray-500 text-sm tracking-widest">
-                          Email
-                        </p>
-                        <p className="font-semibold text-lg text-gray-500 tracking-widest leading-4">
-                          {user && user.email}
-                        </p>
-                      </div>
-                      <div className="mt-2">
-                        <p className="font-normal text-gray-500 text-sm tracking-widest">
-                          Jenis kelamin
-                        </p>
-                        <p className="font-semibold text-lg text-gray-500 tracking-widest">
-                          {user && user.jenis_kelamin === "L"
-                            ? "Laki -laki"
-                            : "Perempuan"}
-                        </p>
-                      </div>
-                      <div className="mt-2">
-                        <p className="font-normal text-gray-500 text-sm tracking-widest leading-4">
-                          Tanggal lahir
-                        </p>
-                        <p className="font-semibold text-gray-500 tracking-widest">
-                          {user && user.tanggal_lahir}
-                        </p>
-                      </div>
-                      <div className="mt-2">
-                        <p className="font-normal text-gray-500 text-sm tracking-widest leading-4">
-                          Nomor handphone
-                        </p>
-                        <p className="font-semibold text-gray-500 tracking-widest">
-                          {user && user.telepon}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-span-2">
-                    <div className="relative w-full h-full">
-                      {/* <img
-                        className="w-full rounded-lg absolute right-5 -top-11"
-                        style={{ height: "135%" }}
-                        src={image === "" ? IconHero : image}
-                      /> */}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* image profile */}
-              {/* <div className="w-full justify-center items-center flex-col flex order-1 sm:order-none">
-                <div className="w-32 h-32 border-2 rounded-2xl overflow-hidden">
-                  <div className="h-full flex items-center">
-                    <img className="" src={image === "" ? IconHero : image} />
-                  </div>
-                </div>
-
-                <hr />
-              </div> */}
+        <div className="col-span-12 lg:col-span-7 h-full overflow-y-hidden sm:mt-0 mt-4">
+          <div className="h-full flex flex-col items-center bg-white rounded-lg xl:rounded-md m-0 sm:m-4 overflow-y-scroll p-4">
+            <div
+              className="w-40 h-40 rounded-lg overflow-hidden"
+              style={{ minWidth: "10rem", minHeight: "10rem" }}
+            >
+              <img
+                className="w-full rounded-lg"
+                src={image === "" ? IconHero : image}
+              />
             </div>
-            {/* list identitas text */}
-            {/* <div className="grid grid-cols-3 gap-2 xl:gap-8 mt-2 xl:mt-20 px-2 text-xs xshome:text-sm xl:text-base">
-              <div className="col-span-3 sm:col-span-1">
-                <div className="rounded-lg px-2 xl:px-6 py-3 text-white border bg-card">
-                  <p className="font-bold">Nomor tes</p>
-                  <p>0232893434232</p>
+            <div className="my-6">
+              <h1 className="text-green2 font-semibold text-2xl text-center">
+                {user && user.nama}
+              </h1>
+              <h4 className="font-semibold text-base text-gray2">
+                {user && user.email}
+              </h4>
+            </div>
+            <div>
+              <div className="flex justify-center">
+                <div className="flex items-center rounded-lg p-2 shadow-md border mr-4">
+                  <IconMale className="mr-2" />
+                  <p className="text-green2 font-semibold text-base">
+                    {user && user.jenis_kelamin === "L"
+                      ? "Laki -laki"
+                      : "Perempuan"}
+                  </p>
+                </div>
+                <div className="flex items-center rounded-lg p-2 shadow-md border">
+                  <IconTanggal className="mr-2" />
+                  <p className="text-green2 font-semibold text-base">
+                    {user && user.tanggal_lahir}
+                  </p>
                 </div>
               </div>
-              <div className="col-span-3 sm:col-span-1">
-                <div className="rounded-lg px-2 xl:px-6 py-3 text-white border bg-card">
-                  <p className="font-bold">Nomor tes</p>
-                  <p>0232893434232</p>
+              <div className="flex justify-center">
+                <div className="flex items-center rounded-lg p-2 shadow-md border mr-4 mt-4">
+                  <IconPager className="mr-2" />
+                  <p className="text-green2 font-semibold text-base whitespace-nowrap">
+                    <span className="font-light text-gray4 mr-2">Id Tes</span>
+                    {user && user.id}
+                  </p>
+                </div>
+                <div className="flex items-center rounded-lg p-2 shadow-md border mt-4">
+                  <IconPhone className="mr-2" />
+                  <p className="text-green2 font-semibold text-base">
+                    {user && user.telepon}
+                  </p>
                 </div>
               </div>
-              <div className="col-span-3 sm:col-span-1">
-                <div className="rounded-lg px-2 xl:px-6 py-3 text-white border bg-card">
-                  <p className="font-bold">Nomor tes</p>
-                  <p>0232893434232</p>
-                </div>
-              </div>
-            </div> */}
-            {/* list waktu tes */}
-            {/* <div className="grid grid-cols-2 gap-2 sm:gap-8 mt-6 px-2 text-xs xshome:text-sm xl:text-base">
-              <div className="col-span-2 border sm:border-none sm:col-span-1">
-                <div className="flex items-center w-full justify-between shadow-lg px-4 py-2 rounded-lg border">
-                  <div className="text-green">
-                    <p className="font-bold">Waktu simulasi</p>
-                    <p>08.00 , 12/03/2020</p>
-                  </div>
-                  <IconTime />
-                </div>
-              </div>
-              <div className="col-span-2 border sm:border-none sm:col-span-1">
-                <div className="flex items-center w-full justify-between shadow-lg px-4 py-2 rounded-lg border">
-                  <div className="text-green">
-                    <p className="font-bold">Waktu simulasi</p>
-                    <p>08.00 , 12/03/2020</p>
-                  </div>
-                  <IconTime />
-                </div>
-              </div>
-            </div> */}
-            {/* button */}
-            <div className="flex w-full justify-center items-center mt-5 xl:mt-10 pb-5 text-litle xshome:text-sm xl:text-base">
-              {/* <Link
-                to="/quis"
-                className="mr-4 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 9uration-200 text-center cursor-pointer"
-              >
-                Mulai Tes
-              </Link> */}
-
-              <button
-                className="px-6 py-2 rounded-lg bg-blue opacity-50 text-white hover:bg-opacity-80 duration-200 text-center cursor-not-allowed outline-none focus:outline-none"
-                disabled
-              >
-                Mulai Simulasi
-              </button>
-
-              {/* <form onSubmit={handleSubmit(onSubmit)}>
-                <input
-                  className="w-full  mt-3 p-2 border border-gray-200 left-0 rounded-md focus:outline-none"
-                  placeholder="Nama"
-                  type="file"
-                  {...register("image")}
-                />
-                <button
-                  className="mt-3 p-2 bg-green-500 text-white focus:outline-none flex items-center w-full justify-center rounded-md font-bold"
-                  type="submit"
-                ></button>
-              </form> */}
+            </div>
+            <button
+              className="px-6 py-2 my-10 rounded-lg bg-blue opacity-50 text-white hover:bg-opacity-80 duration-200 text-center cursor-not-allowed outline-none focus:outline-none"
+              disabled
+            >
+              Mulai Simulasi
+            </button>
+            <div className="grid sm:grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 w-full pb-12">
+              {sesi_ujian &&
+                sesi_ujian.map((items, i) => {
+                  return (
+                    <div className="col-span-1 mt-6 sm:mt-0" key={i}>
+                      <div className="shadow-lg border rounded-lg p-4 relative">
+                        <div>
+                          <p className="text-xs text-gray3">Durasi</p>
+                          <p className="text-green1 text-base font-semibold">
+                            {items.waktu_tes} Menit
+                          </p>
+                        </div>
+                        <div className="mt-2">
+                          <p className="text-xs text-gray3">Mulai :</p>
+                          <p className="text-green1 text-base font-semibold">
+                            {items.waktu_mulai}
+                          </p>
+                        </div>
+                        <div className="mt-2">
+                          <p className="text-xs">Berakhir</p>
+                          <p className="text-green1 text-base font-semibold">
+                            {items.waktu_selesai}
+                          </p>
+                        </div>
+                        <div className="mt-2">
+                          <p className="text-xs">Sesi ujian :</p>
+                          <p className="text-green1 text-base font-semibold">
+                            {items.nama_sesi_ujian}
+                          </p>
+                        </div>
+                        <button
+                          className="px-4 py-2 bg-orange rounded-lg text-white text-sm hover:bg-opacity-80 duration-200 focus:outline-none absolute right-0 -bottom-5"
+                          onClick={() =>
+                            verifikasiImage(items.id_sesi_ujian, i)
+                          }
+                        >
+                          Mulai tes
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>

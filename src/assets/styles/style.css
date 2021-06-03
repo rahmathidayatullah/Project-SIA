@@ -1,5 +1,6 @@
 .bg-home {
-  background: linear-gradient(180deg, #0ca593 0%, #139f7e 100%);
+  /* background: linear-gradient(180deg, #0ca593 0%, #139f7e 100%); */
+  background-color: #096C61;
 }
 .bg-card {
   background: linear-gradient(180deg, #128c7e 0%, #0ca593 100%);

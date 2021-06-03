@@ -1,5 +1,5 @@
 export function GetTime() {
-  const tanggalTujuan = new Date("Jun 3, 2021 16:26:00").getTime();
+  const tanggalTujuan = new Date("Jun 3, 2021 18:20:00").getTime();
   const sekarang = new Date().getTime();
 
   const selisih = tanggalTujuan - sekarang;
@@ -8,5 +8,4 @@ export function GetTime() {
   const jam = Math.floor((selisih % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const menit = Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60));
   const detik = Math.floor((selisih % (1000 * 60)) / 1000);
-  return console.log(detik);
 }

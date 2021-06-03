@@ -18,6 +18,7 @@ import Soal from "./soal";
 import NavigasiPengawas from "./navigasiPengawas";
 import Bantuan from "./bantuan";
 import ModalTimeout from "./modal/timeout";
+import moment from "moment";
 
 // time
 import { GetTime } from "utils/getTime";
@@ -26,9 +27,58 @@ export default function Quiz() {
   let dispatch = useDispatch();
   let history = useHistory();
   const { ujian } = useSelector((state) => state.home.data);
+  const id_ujian = useSelector((state) => state.home.id_ujian);
   const timeQuis = useSelector((state) => state.home.timeQuis);
 
-  GetTime();
+  const data1 = new Date();
+
+  const waktucustom = moment(data1).add(1, "minute").format("LL HH:mm:ss");
+
+  const [timeDuration, setTimeDuration] = useState({
+    hari: 0,
+    jam: 0,
+    menit: 0,
+    detik: 0,
+  });
+  console.log("timeDuration", timeDuration);
+
+  const setTime = () => {
+    const times = setInterval(() => {
+      // const tanggalTujuan = new Date(waktucustom).getTime();
+      const tanggalTujuan = new Date("Juni 4, 2021 23:59:00").getTime();
+
+      const sekarang = new Date().getTime();
+
+      const selisih = tanggalTujuan - sekarang;
+
+      const hari = Math.floor(selisih / (1000 * 60 * 60 * 24));
+      const jam = Math.floor(
+        (selisih % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const menit = Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60));
+      const detik = Math.floor((selisih % (1000 * 60)) / 1000);
+      if (selisih < 0) {
+        clearInterval(times);
+        setTimeDuration({
+          ...time,
+          hari: 0,
+          jam: 0,
+          menit: 0,
+          detik: 0,
+        });
+        alert("stop");
+      } else {
+        setTimeDuration({
+          ...time,
+          hari: hari,
+          jam: jam,
+          menit: menit,
+          detik: detik,
+        });
+      }
+    }, 1000);
+  };
+  // console.log("timeDuration", timeDuration);
 
   // alert new tab
   // const valueAlert = () => {
@@ -40,10 +90,8 @@ export default function Quiz() {
 
   // set time over
   const time = new Date();
-  // console.log("time", time);
-  time.setSeconds(time.getSeconds() + 300);
-
-  // console.log("time", time);
+  console.log("new Date()", time);
+  time.setSeconds(time.getSeconds() + 10);
 
   const { seconds, minutes, hours, start, restart } = useTimer({
     expiryTimestamp: time,
@@ -85,7 +133,8 @@ export default function Quiz() {
   };
 
   useEffect(() => {
-    start();
+    // start();
+    setTime();
     dispatch(fetchDataHome());
     // send data action time quis
     dispatch(sendTimeQuis(seconds, minutes, hours));
@@ -105,7 +154,13 @@ export default function Quiz() {
               </p>
 
               <p className="font-semibold text-md mt-2 xsquis:mt-0 mt-2 border-b-4 border-gray-500">
-                Sesi TKDA
+                {id_ujian && id_ujian === 1
+                  ? "Sesi TKBI"
+                  : id_ujian === 2
+                  ? "Sesi TKDA"
+                  : id_ujian === 3
+                  ? "Sesi Prodi"
+                  : ""}
               </p>
 
               <div className="flex flex-wrap items-center mt-2 xsquis:mt-0 mb-3 xsquis:mb-0">
@@ -121,7 +176,9 @@ export default function Quiz() {
                     className="mr-1"
                   />
                   <p>
-                    {hours} : {minutes} : {seconds}
+                    {timeDuration.jam} : {timeDuration.menit} :
+                    {timeDuration.detik}
+                    {/* {hours} : {minutes} : {seconds} */}
                   </p>
                 </div>
                 <button

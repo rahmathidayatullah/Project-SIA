@@ -9,10 +9,14 @@ module.exports = {
         green: "#096C61",
         // icon login,border,btn
         green1: "#0CA593",
+        green2: "#128C7E",
         // placeholder login
         gray1: "#DADADA",
         orange: "#FF6745",
         blue: "#49A8FF",
+        gray3: "#636363",
+        gray2: "#727272",
+        gray4: "#C2C2C2",
       },
       borderColor: {
         // icon login,border,btn

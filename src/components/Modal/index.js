@@ -4,7 +4,7 @@ import IconClose from "assets/icon/Close";
 export default function Modal({ show, close, header, content, footer }) {
   return (
     <div
-      className={`fixed h-screen inset-0 w-full bg-black bg-opacity-80 z-10 duration-200 ${
+      className={`fixed h-screen inset-0 w-full bg-black bg-opacity-80 z-50 duration-200 ${
         show ? "top-0" : "top-130%"
       }`}
     >

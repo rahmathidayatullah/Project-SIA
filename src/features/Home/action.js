@@ -63,23 +63,24 @@ export const succestSetTimeQuis = (value) => {
   };
 };
 
-export const statusUjianGet = (id) => {
+export const statusUjianGet = (id_ujian) => {
   return async (dispatch) => {
     try {
       let {
         data: { data },
-      } = await getStatusUjian(id);
+      } = await getStatusUjian(id_ujian);
       console.log("data", data);
-      dispatch(succesStatusUjianGet(data));
+      dispatch(succesStatusUjianGet(data, id_ujian));
     } catch (error) {
       console.log("ujian redux error", error);
     }
   };
 };
 
-export const succesStatusUjianGet = (data) => {
+export const succesStatusUjianGet = (data, id_ujian) => {
   return {
     type: SUCCESS_GET_STATUS_UJIAN,
     data,
+    id_ujian,
   };
 };
