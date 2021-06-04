@@ -11,7 +11,11 @@ import Modal from "components/Modal";
 import { quizData } from "components/quiz/fakeData";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { fetchDataHome } from "features/Home/action";
+import {
+  fetchDataHome,
+  resetIdUjian,
+  succesStatusUjianGet,
+} from "features/Home/action";
 import { sendTimeQuis } from "features/Quiz/action";
 // component
 import Soal from "./soal";
@@ -29,10 +33,12 @@ export default function Quiz() {
   const { ujian } = useSelector((state) => state.home.data);
   const id_ujian = useSelector((state) => state.home.id_ujian);
   const timeQuis = useSelector((state) => state.home.timeQuis);
+  const dataQuis = useSelector((state) => state.quiz.dataQuis);
+  console.log("dataQuisaaaaaaaaaaaaaa", dataQuis);
 
   const data1 = new Date();
 
-  const waktucustom = moment(data1).add(1, "minute").format("LL HH:mm:ss");
+  const waktucustom = moment(data1).add(6, "second").format("LL HH:mm:ss");
 
   const [timeDuration, setTimeDuration] = useState({
     hari: 0,
@@ -44,8 +50,8 @@ export default function Quiz() {
 
   const setTime = () => {
     const times = setInterval(() => {
-      // const tanggalTujuan = new Date(waktucustom).getTime();
-      const tanggalTujuan = new Date("Juni 4, 2021 23:59:00").getTime();
+      const tanggalTujuan = new Date(waktucustom).getTime();
+      // const tanggalTujuan = new Date("Juni 4, 2021 13:15:00").getTime();
 
       const sekarang = new Date().getTime();
 
@@ -57,19 +63,21 @@ export default function Quiz() {
       );
       const menit = Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60));
       const detik = Math.floor((selisih % (1000 * 60)) / 1000);
+      console.log("selisih", selisih);
       if (selisih < 0) {
         clearInterval(times);
         setTimeDuration({
-          ...time,
+          ...timeDuration,
           hari: 0,
           jam: 0,
           menit: 0,
           detik: 0,
         });
-        alert("stop");
+        setIsShow(true);
+        dispatch(resetIdUjian());
       } else {
         setTimeDuration({
-          ...time,
+          ...timeDuration,
           hari: hari,
           jam: jam,
           menit: menit,
@@ -89,17 +97,17 @@ export default function Quiz() {
   // console.log("timeQuiz", data);
 
   // set time over
-  const time = new Date();
-  console.log("new Date()", time);
-  time.setSeconds(time.getSeconds() + 10);
+  // const time = new Date();
+  // console.log("new Date()", time);
+  // time.setSeconds(time.getSeconds() + 10);
 
-  const { seconds, minutes, hours, start, restart } = useTimer({
-    expiryTimestamp: time,
-    onExpire: () => setIsShow(true),
-  });
+  // const { seconds, minutes, hours, start, restart } = useTimer({
+  //   expiryTimestamp: time,
+  //   onExpire: () => setIsShow(true),
+  // });
 
-  let dataTime = [{ detik: seconds, menit: minutes, jam: hours }];
-  localStorage.setItem("time_quis", JSON.stringify(dataTime));
+  // let dataTime = [{ detik: seconds, menit: minutes, jam: hours }];
+  // localStorage.setItem("time_quis", JSON.stringify(dataTime));
 
   // console.log("seconds", seconds);
   // state massage bantuan
@@ -137,7 +145,7 @@ export default function Quiz() {
     setTime();
     dispatch(fetchDataHome());
     // send data action time quis
-    dispatch(sendTimeQuis(seconds, minutes, hours));
+    // dispatch(sendTimeQuis(seconds, minutes, hours));
     // window.addEventListener("focus", valueAlert);
   }, []);
   return (
@@ -379,7 +387,7 @@ export default function Quiz() {
         {/* timeout */}
         <Modal
           show={isShow}
-          close={closeModal}
+          close={() => history.push("/home")}
           header={
             <h1 className="absolute left-1/2 transform -translate-x-1/2">
               Modal title

@@ -7,9 +7,11 @@ import {
   SELECT_OPTION,
   CHANGE_CURRENT_INDEX,
   SENT_TIME_QUIS,
+  SUCCESS_FETCH_API_QUIZ,
 } from "./constants";
 
 import { quizData } from "api/quiz";
+import { sendImage } from "api/home";
 
 export const fetchQuiz = () => {
   return (dispatch, getState) => {
@@ -135,11 +137,34 @@ export const changeCurrentIndex = (i) => {
   };
 };
 
-export const sendTimeQuis = (seconds, minutes, hours) => {
-  return (dispatch, getState) => {
-    let [{ detik, menit, jam }] = getState().quiz.timeQuis;
+// export const sendTimeQuis = (seconds, minutes, hours) => {
+//   return (dispatch, getState) => {
+//     let [{ detik, menit, jam }] = getState().quiz.timeQuis;
 
-    if (detik && menit && jam === 0) {
+//     if (detik && menit && jam === 0) {
+//     }
+//   };
+// };
+
+// action send func to get data quis from api
+export const fetchQuizApi = (indexSesiQuis, imageSrc) => {
+  return async (dispatch, getState) => {
+    try {
+      let {
+        data: { data },
+      } = await sendImage(indexSesiQuis, imageSrc);
+      // console.log("data from action imagesend", data.soal);
+      dispatch(successFetchQuizApi(data));
+    } catch (error) {
+      console.log("error", error);
+      console.log("error response", error.response);
     }
+  };
+};
+
+export const successFetchQuizApi = (data) => {
+  return {
+    type: SUCCESS_FETCH_API_QUIZ,
+    data,
   };
 };

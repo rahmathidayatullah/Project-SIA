@@ -4,6 +4,7 @@ import {
   SUCCESS_FETCHING_DATA,
   SUCCESS_SET_TIME_QUIS,
   SUCCESS_GET_STATUS_UJIAN,
+  RESET_ID_UJIAN,
 } from "./constans";
 
 import { getDataUjian, getStatusUjian } from "api/home";
@@ -82,5 +83,11 @@ export const succesStatusUjianGet = (data, id_ujian) => {
     type: SUCCESS_GET_STATUS_UJIAN,
     data,
     id_ujian,
+  };
+};
+
+export const resetIdUjian = () => {
+  return {
+    type: RESET_ID_UJIAN,
   };
 };

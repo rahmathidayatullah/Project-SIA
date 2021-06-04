@@ -4,6 +4,7 @@ import {
   SUCCESS_FETCHING_DATA,
   SUCCESS_SET_TIME_QUIS,
   SUCCESS_GET_STATUS_UJIAN,
+  RESET_ID_UJIAN,
 } from "./constans";
 
 const statuslist = {
@@ -45,6 +46,9 @@ export default function reducer(state = initialState, action) {
 
     case SUCCESS_GET_STATUS_UJIAN:
       return { ...state, isUjian: action.data, id_ujian: action.id_ujian };
+
+    case RESET_ID_UJIAN:
+      return { ...state, id_ujian: 0 };
 
     default:
       return state;

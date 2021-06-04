@@ -32,7 +32,20 @@ export default function Soal(
     titleVerbal,
   } = useSelector((state) => state.quiz.data);
 
+  const dataQuis = useSelector((state) => state.quiz.dataQuis);
+  console.log("dataQuisasasdasd", dataQuis);
+
+  // from api data quis
+  const dataQuisApi = useSelector((state) => state.home);
+
+  const [dataQuisArray, setDataQuisArray] = useState();
+
+  const [arrayLength, setArrayLength] = useState(0);
+
+  console.log("dataQuisArray", dataQuisArray);
+
   useEffect(() => {
+    setDataQuisArray(dataQuis.soal);
     dispatch(fetchQuiz());
   }, [dispatch, dataQuiz.currentIndex, dataQuiz.select]);
 

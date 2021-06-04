@@ -26,13 +26,17 @@ import IconMale from "assets/icon/Male";
 import IconTanggal from "assets/icon/Tanggal";
 import IconPager from "assets/icon/Pager";
 import IconPhone from "assets/icon/Phone";
+import { fetchQuizApi } from "features/Quiz/action";
 
 export default function Home() {
   let dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const { user, sesi_ujian } = useSelector((state) => state.home.data);
-  const { isUjian } = useSelector((state) => state.home);
+  const { isUjian, id_ujian } = useSelector((state) => state.home);
+  // const dataQuis = useSelector((state) => state.quiz.dataQuis);
+  // console.log("dataQuis", dataQuis.is_valid);
+  console.log("id_ujian", id_ujian);
   const [toggleLogout, setToggleLogout] = useState("opacity-0");
   const [showModal, setShowModal] = React.useState();
   const [modalLoad, setModalLoad] = useState(false);
@@ -57,19 +61,31 @@ export default function Home() {
     setImage(imageSrc);
     setModalLoad(true);
 
-    console.log("indexSesiQuis", indexSesiQuis);
-    try {
-      console.log("berhasil get api");
-      let { data } = await sendImage(indexSesiQuis, imageSrc);
-      console.log("data response success", data);
-      setTimeout(() => {
-        history.push("/quis");
-      }, 2500);
-    } catch (error) {
-      console.log("gagal get response 1", error);
-      console.log("gagal get response 2", error.response);
-    }
+    // console.log("indexSesiQuis", indexSesiQuis);
+    // try {
+    //   console.log("berhasil get api");
+    //   let { data } = await sendImage(indexSesiQuis, imageSrc);
+    //   console.log("data response success", data);
+    //   setTimeout(() => {
+    //     history.push("/quis");
+    //   }, 2500);
+    // } catch (error) {
+    //   console.log("gagal get response 1", error);
+    //   console.log("gagal get response 2", error.response);
+    // }
     dispatch(setTimeQuis());
+
+    dispatch(fetchQuizApi(indexSesiQuis, imageSrc));
+
+    setTimeout(() => {
+      history.push("/quis");
+    }, 2500);
+
+    // if (dataQuis.is_valid === true) {
+    //   history.push("/quis");
+    // } else {
+    //   alert("somthing wrong guys");
+    // }
   }, [webcamRef]);
 
   // const handleSaveImage = () => {
@@ -100,8 +116,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-    dispatch(fetchDataHome());
-    dispatch(statusUjianGet());
+    if (id_ujian == 0) {
+      dispatch(fetchDataHome());
+      dispatch(statusUjianGet());
+    } else {
+      history.push("/quis");
+    }
   }, []);
 
   return (

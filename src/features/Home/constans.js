@@ -4,3 +4,4 @@ export const SUCCESS_FETCHING_DATA = "features/Home/SUCCESS_FETCHING_DATA";
 export const SUCCESS_SET_TIME_QUIS = "features/Home/SUCCESS_SET_TIME_QUIS";
 export const SUCCESS_GET_STATUS_UJIAN =
   "features/Home/SUCCESS_GET_STATUS_UJIAN";
+export const RESET_ID_UJIAN = "features/Home/RESET_ID_UJIAN";
