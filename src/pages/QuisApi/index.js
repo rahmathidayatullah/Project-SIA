@@ -1,51 +1,33 @@
 import React, { useState, useEffect } from "react";
 import IconTime from "assets/icon/Time";
-import IconNavigasi from "assets/icon/Navigasi";
 import IconAsk from "assets/icon/Ask";
 import IconArrow from "assets/icon/Arrow";
 import IconHero from "assets/icon/ImageHero.svg";
 import Webcam from "react-webcam";
-import IconClose from "assets/icon/Close";
-import { useTimer } from "react-timer-hook";
 import Modal from "components/Modal";
-import { quizData } from "components/quiz/fakeData";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import {
-  fetchDataHome,
-  resetIdUjian,
-  succesStatusUjianGet,
-} from "features/Home/action";
-import { sendTimeQuis } from "features/Quiz/action";
-// component
 import Soal from "./soal";
 import NavigasiPengawas from "./navigasiPengawas";
-import Bantuan from "./bantuan";
-import ModalTimeout from "./modal/timeout";
 import moment from "moment";
 
-// time
-import { GetTime } from "utils/getTime";
-
-export default function Quiz() {
+export default function Index() {
   let dispatch = useDispatch();
   let history = useHistory();
-  const { ujian } = useSelector((state) => state.home.data);
+  const [isShow, setIsShow] = useState(false);
+  const [showBantuan, setShowBantuan] = useState(false);
+  const [showPengawas, setShowPengawas] = useState(false);
+  const [image, setImage] = React.useState("");
   const id_ujian = useSelector((state) => state.home.id_ujian);
-  const timeQuis = useSelector((state) => state.home.timeQuis);
-  const dataQuis = useSelector((state) => state.quiz.dataQuis);
 
   const data1 = new Date();
-
-  const waktucustom = moment(data1).add(4, "minutes").format("LL HH:mm:ss");
-
+  const waktucustom = moment(data1).add(30, "seconds").format("LL HH:mm:ss");
   const [timeDuration, setTimeDuration] = useState({
     hari: 0,
     jam: 0,
     menit: 0,
     detik: 0,
   });
-
   const setTime = () => {
     const times = setInterval(() => {
       const tanggalTujuan = new Date(waktucustom).getTime();
@@ -61,6 +43,7 @@ export default function Quiz() {
       );
       const menit = Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60));
       const detik = Math.floor((selisih % (1000 * 60)) / 1000);
+
       if (selisih < 0) {
         clearInterval(times);
         setTimeDuration({
@@ -82,72 +65,20 @@ export default function Quiz() {
       }
     }, 1000);
   };
-  // console.log("timeDuration", timeDuration);
 
-  // alert new tab
-  // const valueAlert = () => {
-  //   alert("tidak boleh buka tab baru !!");
-  // };
-
-  // let data = ujian && ujian.time_minutes * 60;
-  // console.log("timeQuiz", data);
-
-  // set time over
-  // const time = new Date();
-  // console.log("new Date()", time);
-  // time.setSeconds(time.getSeconds() + 10);
-
-  // const { seconds, minutes, hours, start, restart } = useTimer({
-  //   expiryTimestamp: time,
-  //   onExpire: () => setIsShow(true),
-  // });
-
-  // let dataTime = [{ detik: seconds, menit: minutes, jam: hours }];
-  // localStorage.setItem("time_quis", JSON.stringify(dataTime));
-
-  // console.log("seconds", seconds);
-  // state massage bantuan
-  const [showBantuan, setShowBantuan] = useState(false);
-  const [showPengawas, setShowPengawas] = useState(false);
-  // state webcame
-  const [image, setImage] = React.useState("");
-  const [field, setField] = React.useState({
-    image: "",
-  });
   const webcamRef = React.useRef(null);
-  // func capture
   const capture = React.useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
   }, [webcamRef]);
 
-  const handleSaveImage = () => {
-    setField({ ...field, image: image });
-  };
-
-  const [isShow, setIsShow] = useState(false);
-  // close modal
-  const closeModal = () => {
-    setIsShow(false);
-    // history.push("/home");
-    // restart(time);
-  };
-
   useEffect(() => {
-    // start();
     setTime();
-    dispatch(fetchDataHome());
-    // send data action time quis
-    // dispatch(sendTimeQuis(seconds, minutes, hours));
-    // window.addEventListener("focus", valueAlert);
   }, []);
   return (
     <div className="bg-gray2 h-screen w-screen p-2 overflow-y-hidden">
-      {/* <div id="modalTimeOver"></div> */}
-      {/* {isShow && timeOutQuiz()} */}
       <div className="grid grid-cols-12 gap-4 h-full relative w-full overflow-x-hidden">
         <div className="col-span-12 xl:col-span-8 h-full">
-          {/* head */}
           <div className="p-2 bg-white rounded-lg">
             <div className="flex flex-wrap justify-between border-b pb-2 relative">
               <p className="font-semibold text-md mt-2 xsquis:mt-0">
@@ -169,18 +100,14 @@ export default function Quiz() {
                   Sisa waktu
                 </p>
                 <div className="flex items-center text-sm pl-1 pr-3 py-1 rounded-md bg-orange text-white mr-2 xl:mr-2 mt-2 xsquis:mt-0">
-                  {/* icon time */}
                   <IconTime
                     width="19"
                     height="19"
                     fill="white"
                     className="mr-1"
                   />
-                  <p>
-                    {timeDuration.jam} : {timeDuration.menit} :
-                    {timeDuration.detik}
-                    {/* {hours} : {minutes} : {seconds} */}
-                  </p>
+                  {timeDuration.jam} : {timeDuration.menit} :
+                  {timeDuration.detik}
                 </div>
                 <button
                   className="text-sm px-2 py-1 rounded-md bg-green duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none mt-2 xsquis:mt-0 mr-2"
@@ -200,12 +127,9 @@ export default function Quiz() {
                 </button>
               </div>
             </div>
-            {/* section soal */}
             <Soal />
           </div>
-          {/* bottom section */}
         </div>
-        {/* check pengawas */}
         <div
           className={`absolute xl:static top-0  ${
             showPengawas === false
@@ -214,13 +138,6 @@ export default function Quiz() {
           }  col-span-12 xl:static xl:col-span-4 bg-white xl:bg-auto max-w-xl xl:max-w-none h-screen xl:h-auto overflow-y-scroll border-2 xl:border-none duration-300 rounded-lg scroll-hidden`}
         >
           <div className="bg-white p-3 rounded-lg relative">
-            {/* <div
-              className="hidden lg:flex items-center px-4 py-2 rounded-lg bg-green1 max-w-max text-sm text-white mb-2 cursor-pointer hover:bg-opacity-80"
-              onClick={() => setShowBantuan(false)}
-            >
-              <IconClose className="mr-2" fill="white" />
-              <p>Close bantuan</p>
-            </div> */}
             <button
               className="bg-blue text-white rounded-lg px-3 py-1 text-sm mb-2 outline-none focus:outline-none duration-200 hover:bg-opacity-80 block xl:hidden"
               onClick={() => setShowPengawas(false)}
@@ -258,12 +175,9 @@ export default function Quiz() {
                 </div>
               </div>
             </div>
-            {/* navigasi soal */}
             <NavigasiPengawas />
           </div>
         </div>
-
-        {/* Bantuan */}
         <div
           className={`absolute top-0  ${
             showBantuan === false
@@ -377,7 +291,6 @@ export default function Quiz() {
             </button>
           </div>
         </div>
-        {/* timeout */}
         <Modal
           show={isShow}
           close={() => history.push("/home")}

@@ -106,14 +106,6 @@ export default function reducer(state = initialState, action) {
         timeQuis: action.value,
       };
 
-    // from api tes
-
-    case SUCCESS_FETCH_API_QUIZ:
-      return {
-        ...state,
-        dataQuis: action.data,
-      };
-
     default:
       return state;
   }

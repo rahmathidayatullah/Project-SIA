@@ -11,7 +11,6 @@ import {
 } from "./constants";
 
 import { quizData } from "api/quiz";
-import { sendImage } from "api/home";
 
 export const fetchQuiz = () => {
   return (dispatch, getState) => {
@@ -120,8 +119,6 @@ export const selectOption = (indexOption) => {
     const noSelect = data.filter((item, i) => item.selected !== true);
     const totalNoSelect = noSelect.length;
 
-    console.log("totalNoSelect", totalNoSelect);
-
     // action to all var
     dispatch(
       optionSelect(data, fetch, hasilSelect, totalSelect, totalNoSelect)
@@ -145,26 +142,3 @@ export const changeCurrentIndex = (i) => {
 //     }
 //   };
 // };
-
-// action send func to get data quis from api
-export const fetchQuizApi = (indexSesiQuis, imageSrc) => {
-  return async (dispatch, getState) => {
-    try {
-      let {
-        data: { data },
-      } = await sendImage(indexSesiQuis, imageSrc);
-      // console.log("data from action imagesend", data.soal);
-      dispatch(successFetchQuizApi(data));
-    } catch (error) {
-      console.log("error", error);
-      console.log("error response", error.response);
-    }
-  };
-};
-
-export const successFetchQuizApi = (data) => {
-  return {
-    type: SUCCESS_FETCH_API_QUIZ,
-    data,
-  };
-};

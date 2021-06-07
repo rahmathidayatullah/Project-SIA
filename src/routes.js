@@ -4,6 +4,7 @@ import { lazy } from "react";
 
 const Home = lazy(() => import("pages/Home"));
 const Quis = lazy(() => import("pages/Quis"));
+const QuisApi = lazy(() => import("pages/QuisApi"));
 const Login = lazy(() => import("pages/Login"));
 const NotAuthorized = lazy(() => import("pages/NotAuthorized"));
 const NotFound = lazy(() => import("pages/NotFound"));
@@ -19,6 +20,13 @@ const QuizPage = () => {
   return (
     <GuardRoute>
       <Quis />
+    </GuardRoute>
+  );
+};
+const QuizApiPage = () => {
+  return (
+    <GuardRoute>
+      <QuisApi />
     </GuardRoute>
   );
 };
@@ -44,6 +52,11 @@ const routes = [
   {
     path: "/quis",
     component: QuizPage,
+    auth: true,
+  },
+  {
+    path: "/quisApi",
+    component: QuizApiPage,
     auth: true,
   },
   {

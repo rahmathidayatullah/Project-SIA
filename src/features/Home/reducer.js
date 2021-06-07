@@ -2,9 +2,10 @@ import {
   START_FETCHING_DATA,
   ERROR_FETCHING_DATA,
   SUCCESS_FETCHING_DATA,
-  SUCCESS_SET_TIME_QUIS,
-  SUCCESS_GET_STATUS_UJIAN,
-  RESET_ID_UJIAN,
+  SET_DATA_SESI_UJIAN,
+  SUCCESS_UJIAN_STATUS_CHECK,
+  SUCCESS_GET_DATA_CHECK_UJIAN,
+  SUCCESS_GET_DATA_QUIZ_BY_ID,
 } from "./constans";
 
 const statuslist = {
@@ -15,16 +16,28 @@ const statuslist = {
 };
 
 const initialState = {
-  data: [],
   status: statuslist.idle,
-  timeQuis: 0,
-  isUjian: false,
-  id_ujian: 0,
+  // API Get Home
+  data: [],
+  // API Cek Ujian
+  cekUjian: [],
+  // API Mulai Sesi Ujian
+  mulaiSesiUjian: [],
+  mulaiTes: { id_ujian: 0, nama_sesi_ujian: "" },
+  // API Kirim foto sebelum ujian
+  dataQuiz: [],
+  // API Kirim jawaban soal ujian
+  kirimJawanSoalUjian: [],
+  // state for soal from
+  // API Kirim foto sebelum ujian
+  // save data by array [index from 0]
+  dataQuizByIndex: [],
+  currentIndex: 0,
+  //
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    // reducer daily
     case START_FETCHING_DATA:
       return {
         ...state,
@@ -41,14 +54,32 @@ export default function reducer(state = initialState, action) {
     case ERROR_FETCHING_DATA:
       return { ...state, status: statuslist.error };
 
-    case SUCCESS_SET_TIME_QUIS:
-      return { ...state, timeQuis: action.value * 60 };
+    case SET_DATA_SESI_UJIAN:
+      return {
+        ...state,
+        mulaiTes: {
+          id_ujian: action.ujian_sesi_id,
+          sesi_ujian: action.ujian_sesi_nama,
+        },
+      };
 
-    case SUCCESS_GET_STATUS_UJIAN:
-      return { ...state, isUjian: action.data, id_ujian: action.id_ujian };
+    case SUCCESS_UJIAN_STATUS_CHECK:
+      return {
+        ...state,
+        cekUjian: action.data,
+      };
 
-    case RESET_ID_UJIAN:
-      return { ...state, id_ujian: 0 };
+    case SUCCESS_GET_DATA_CHECK_UJIAN:
+      return {
+        ...state,
+        mulaiSesiUjian: action.data,
+      };
+
+    case SUCCESS_GET_DATA_QUIZ_BY_ID:
+      return {
+        ...state,
+        dataQuiz: action.data,
+      };
 
     default:
       return state;

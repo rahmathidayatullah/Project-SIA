@@ -23,14 +23,11 @@ export default function Login() {
   const history = useHistory();
 
   const onSubmit = async ({ email, password }) => {
-    console.log("email,password", email, password);
-
     try {
       const {
         data: { data },
       } = await login(email, password);
       let { user, sesi_ujian, token } = data;
-      console.log("user, ujian, token", user, sesi_ujian, token);
       dispatch(userLogin(token, user, sesi_ujian));
       history.push("/home");
     } catch (error) {

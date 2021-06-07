@@ -2,21 +2,25 @@ import {
   START_FETCHING_DATA,
   ERROR_FETCHING_DATA,
   SUCCESS_FETCHING_DATA,
-  SUCCESS_SET_TIME_QUIS,
-  SUCCESS_GET_STATUS_UJIAN,
-  RESET_ID_UJIAN,
+  SET_DATA_SESI_UJIAN,
+  SUCCESS_UJIAN_STATUS_CHECK,
+  SUCCESS_GET_DATA_CHECK_UJIAN,
+  SUCCESS_GET_DATA_QUIZ_BY_ID,
 } from "./constans";
 
-import { getDataUjian, getStatusUjian } from "api/home";
+import {
+  getDataUjian,
+  checkStatusUjian,
+  getStatusUjian,
+  getDataQuizByID,
+} from "api/home";
 
+// action set data from response home
 export const fetchDataHome = () => {
   return async (dispatch, getState) => {
     dispatch(startFetchHome());
     try {
-      let {
-        data: { data },
-      } = await getDataUjian();
-      console.log("dataasssssssssssssssssssss", data);
+      let { data } = await getDataUjian();
       dispatch(successFetchHome(data));
     } catch (error) {
       console.log(error);
@@ -24,7 +28,6 @@ export const fetchDataHome = () => {
     }
   };
 };
-
 export const startFetchHome = () => {
   return {
     type: START_FETCHING_DATA,
@@ -41,53 +44,66 @@ export const errorFetchHome = () => {
     type: ERROR_FETCHING_DATA,
   };
 };
-export const setTimeQuis = () => {
+
+// action set data from response cek ujian
+
+export const ujianStatusCheck = () => {
   return async (dispatch, getState) => {
     try {
-      let {
-        data: {
-          data: { ujian },
-        },
-      } = await getDataUjian();
-      console.log("ujian redux", ujian.time_minutes);
-      dispatch(succestSetTimeQuis(ujian.time_minutes));
+      let { data } = await checkStatusUjian();
+      dispatch(successUjianStatusCheck(data));
     } catch (error) {
-      console.log("ujian redux error", error);
+      console.log("error ujianStatusCheck", error);
+      console.log("error ujianStatusCheck reponse", error.response);
     }
   };
 };
 
-export const succestSetTimeQuis = (value) => {
+export const successUjianStatusCheck = (data) => {
   return {
-    type: SUCCESS_SET_TIME_QUIS,
-    value,
-  };
-};
-
-export const statusUjianGet = (id_ujian) => {
-  return async (dispatch) => {
-    try {
-      let {
-        data: { data },
-      } = await getStatusUjian(id_ujian);
-      console.log("data", data);
-      dispatch(succesStatusUjianGet(data, id_ujian));
-    } catch (error) {
-      console.log("ujian redux error", error);
-    }
-  };
-};
-
-export const succesStatusUjianGet = (data, id_ujian) => {
-  return {
-    type: SUCCESS_GET_STATUS_UJIAN,
+    type: SUCCESS_UJIAN_STATUS_CHECK,
     data,
-    id_ujian,
   };
 };
 
-export const resetIdUjian = () => {
+// action set data from mulai sesi ujian
+
+export const getDataCheckUjian = (id) => {
+  return async (dispatch, getState) => {
+    try {
+      let { data } = await getStatusUjian(id);
+      dispatch(successGetDataCheckUjian(data));
+    } catch (error) {
+      console.log("error getDataCheckUjian", error);
+      console.log("error getDataCheckUjian reponse", error.response);
+    }
+  };
+};
+
+export const successGetDataCheckUjian = (data) => {
   return {
-    type: RESET_ID_UJIAN,
+    type: SUCCESS_GET_DATA_CHECK_UJIAN,
+    data,
+  };
+};
+
+//
+
+export const mulaiTes = (ujian_sesi_id, ujian_sesi_nama) => {
+  return async (dispatch, getState) => {
+    try {
+      let { data } = await getStatusUjian(ujian_sesi_id);
+    } catch (error) {
+      console.log("error mulaiTes", error);
+      console.log("error mulaiTes reponse", error.response);
+    }
+  };
+};
+
+export const setDataSesiUjian = (ujian_sesi_id, ujian_sesi_nama) => {
+  return {
+    type: SET_DATA_SESI_UJIAN,
+    ujian_sesi_id,
+    ujian_sesi_nama,
   };
 };

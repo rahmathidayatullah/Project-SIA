@@ -1,13 +1,10 @@
+import { startQuiz } from "features/Quiz/action";
 import {
-  START_FETCHING_QUIZ,
   ERROR_FETCHING_QUIZ,
   SUCCESS_FETCHING_QUIZ,
   PREV_PAGE,
   NEXT_PAGE,
-  SELECT_OPTION,
-  CHANGE_CURRENT_INDEX,
-  SENT_TIME_QUIS,
-  SUCCESS_FETCH_API_QUIZ,
+  SUCCESS_GET_DATA_QUIZ_BY_ID,
 } from "./constants";
 
 const statuslist = {
@@ -18,50 +15,21 @@ const statuslist = {
 };
 
 const initialState = {
-  // get data by currrent
-  data: [],
-  // current index sort data
-  currentIndex: 0,
-  // count all count
-  totalSoal: 0,
   status: statuslist.idle,
-  // key for validate data all and data reduce
-  fetchKey: false,
-  // var data from reduce for use all data
-  allData: [],
-  // count selected for persentase
-  totalSelect: 0,
-  // count answer
-  totalAnswer: 0,
-  // count noAnwer
-  totalNoAnswer: 0,
-  // set time quis
-  timeQuis: [{ detik: 0, menit: 0, jam: 0 }],
-
-  //  get data by currrent // data quis from api
-  dataQuis: [],
-  // current index sort data
-  currentIndexApi: 0,
+  // all data quiz
+  dataQuiz: [],
+  // all data quiz by index
+  dataQuizByIndex: [],
+  currentIndex: 0,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    // reducer daily
-    case START_FETCHING_QUIZ:
-      return {
-        ...state,
-        status: statuslist.process,
-        totalSoal: action.totalSoal - 1,
-        allData: action.allData,
-        totalNoAnswer: action.totalSoal,
-      };
-
     case SUCCESS_FETCHING_QUIZ:
       return {
         ...state,
         status: statuslist.success,
-        data: action.data,
-        fetchKey: action.fetchKey,
+        dataQuizByIndex: action.data,
       };
 
     case ERROR_FETCHING_QUIZ:
@@ -71,7 +39,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         currentIndex:
-          state.currentIndex === state.totalSoal
+          state.currentIndex === state.dataQuiz.length - 1
             ? state.currentIndex + 0
             : state.currentIndex + 1,
       };
@@ -84,34 +52,11 @@ export default function reducer(state = initialState, action) {
             ? state.currentIndex - 0
             : state.currentIndex - 1,
       };
-    case SELECT_OPTION:
+
+    case SUCCESS_GET_DATA_QUIZ_BY_ID:
       return {
         ...state,
-        allData: action.data,
-        fetchKey: action.fetch,
-        totalSelect: action.hasilSelect,
-        totalAnswer: action.totalSelect,
-        totalNoAnswer: action.totalNoSelect,
-      };
-
-    case CHANGE_CURRENT_INDEX:
-      return {
-        ...state,
-        currentIndex: action.i,
-      };
-
-    case SENT_TIME_QUIS:
-      return {
-        ...state,
-        timeQuis: action.value,
-      };
-
-    // from api tes
-
-    case SUCCESS_FETCH_API_QUIZ:
-      return {
-        ...state,
-        dataQuis: action.data,
+        dataQuiz: action.data,
       };
 
     default:

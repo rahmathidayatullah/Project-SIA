@@ -1,112 +1,75 @@
 import React, { useState, useEffect } from "react";
 import IconAccount from "assets/icon/Account";
-import IconAlert from "assets/icon/Alert";
-import IconTime from "assets/icon/Time";
 import IconHero from "assets/icon/rahmatpng.png";
 import IconKamera from "assets/icon/Kamera";
-import IconCheck from "assets/icon/Check";
 import Intersect from "assets/icon/Intersect.svg";
 import Intersect1 from "assets/icon/Intersect (1).svg";
 import Modal from "components/Modal";
 import Webcam from "react-webcam";
 
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchDataHome,
-  setTimeQuis,
-  statusUjianGet,
-} from "features/Home/action";
+import { fetchDataHome } from "features/Home/action";
 import ReactLoading from "react-loading";
-import { sendImage } from "api/home";
-//
-import { useForm } from "react-hook-form";
 import IconFemale from "assets/icon/Female";
 import IconMale from "assets/icon/Male";
 import IconTanggal from "assets/icon/Tanggal";
 import IconPager from "assets/icon/Pager";
 import IconPhone from "assets/icon/Phone";
-import { fetchQuizApi } from "features/Quiz/action";
+import { getDataCheckUjian, ujianStatusCheck } from "features/Home/action";
+import { sendImageAndGetExam } from "features/QuizApi/action";
 
 export default function Home() {
   let dispatch = useDispatch();
   const history = useHistory();
-  const auth = useSelector((state) => state.auth);
-  const { user, sesi_ujian } = useSelector((state) => state.home.data);
-  const { isUjian, id_ujian } = useSelector((state) => state.home);
-  // const dataQuis = useSelector((state) => state.quiz.dataQuis);
-  // console.log("dataQuis", dataQuis.is_valid);
-  console.log("id_ujian", id_ujian);
   const [toggleLogout, setToggleLogout] = useState("opacity-0");
   const [showModal, setShowModal] = React.useState();
   const [modalLoad, setModalLoad] = useState(false);
   const webcamRef = React.useRef(null);
   const [image, setImage] = React.useState("");
   const [indexSesiQuis, setIndexSesiQuis] = useState(0);
-
-  const { register, handleSubmit, errors, setError } = useForm();
-
-  const onSubmit = async (data) => {
-    let image = data.image[0];
-
-    const formData = new FormData();
-    console.log("dataaaaaaaaa", image);
+  const [idUjian, setIdUjian] = useState(0);
+  // API Home
+  const dataHome = useSelector((state) => state.home.data);
+  // console.log("dataHome :", dataHome);
+  // API Cek Ujian
+  const dataCekUjian = useSelector((state) => state.home.cekUjian);
+  // console.log("dataCekUjian :", dataCekUjian);
+  // API Mulai Sesi Ujian
+  const dataMulaiSesiUjian = useSelector((state) => state.home.mulaiSesiUjian);
+  // console.log("dataMulaiSesiUjian :", dataMulaiSesiUjian);
+  // API Kirim Foto Sebelum Ujian
+  const dataSendImageBeforeExam = useSelector(
+    (state) => state.quizApi.dataQuiz
+  );
+  console.log("data Quiz :", dataSendImageBeforeExam);
+  // API Kirim Jawaban Soal Ujian
+  const dataSendAnswer = useSelector((state) => state.home.kirimJawanSoalUjian);
+  // Func Button Mulai Tes
+  const verifikasiImage = (id_sesi_ujian) => {
+    setShowModal(true);
+    setIdUjian(id_sesi_ujian);
+    dispatch(getDataCheckUjian(id_sesi_ujian));
   };
-  const [field, setField] = React.useState({
-    image: "",
-  });
-
+  // Func Button Ambil Foto
   const capture = React.useCallback(async () => {
+    // base 64
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
+    // send server
+    let dataImageSend = { photo: imageSrc };
+
     setModalLoad(true);
-
-    // console.log("indexSesiQuis", indexSesiQuis);
-    // try {
-    //   console.log("berhasil get api");
-    //   let { data } = await sendImage(indexSesiQuis, imageSrc);
-    //   console.log("data response success", data);
-    //   setTimeout(() => {
-    //     history.push("/quis");
-    //   }, 2500);
-    // } catch (error) {
-    //   console.log("gagal get response 1", error);
-    //   console.log("gagal get response 2", error.response);
-    // }
-    dispatch(setTimeQuis());
-
-    dispatch(fetchQuizApi(indexSesiQuis, imageSrc));
-
+    dispatch(sendImageAndGetExam(idUjian, imageSrc, dataImageSend));
     setTimeout(() => {
-      history.push("/quis");
+      history.push("/quisApi");
     }, 2500);
-
-    // if (dataQuis.is_valid === true) {
-    //   history.push("/quis");
-    // } else {
-    //   alert("somthing wrong guys");
-    // }
   }, [webcamRef]);
-
-  // const handleSaveImage = () => {
-  //   setField({ ...field, image: image });
-  // };
 
   const logout = () => {
     setToggleLogout("opacity-0");
     localStorage.removeItem("auth");
     history.push("/");
-  };
-
-  const verifikasiImage = (id_sesi_ujian, index) => {
-    if (isUjian === false) {
-      alert("Ujian belum dimulai");
-    } else {
-      setShowModal(true);
-      console.log("id_sesi_ujian", id_sesi_ujian);
-      dispatch(statusUjianGet(id_sesi_ujian));
-      setIndexSesiQuis(index);
-    }
   };
 
   const closeModalMulti = () => {
@@ -116,12 +79,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (id_ujian == 0) {
-      dispatch(fetchDataHome());
-      dispatch(statusUjianGet());
-    } else {
-      history.push("/quis");
-    }
+    dispatch(fetchDataHome());
+    dispatch(ujianStatusCheck());
   }, []);
 
   return (
@@ -130,7 +89,6 @@ export default function Home() {
       <img src={Intersect} className="absolute" />
       <img src={Intersect1} className="absolute" />
       {/* modal verifikasi foto */}
-
       <Modal
         header={
           <h1 className="absolute font-semibold left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transform z-10">
@@ -225,7 +183,9 @@ export default function Home() {
               S<span className="font-normal">IA</span>
             </h1>
             <div className="flex items-center text-xs xshome:text-xl">
-              <p className="text-white mr-4">{auth.user && auth.user.nama}</p>
+              <p className="text-white mr-4">
+                {dataHome.data && dataHome.data.user.nama}
+              </p>
               <div className="relative">
                 <div
                   className="hover:bg-gray-50 hover:bg-opacity-20 cursor-pointer duration-200 p-2"
@@ -305,26 +265,36 @@ export default function Home() {
             </div>
             <div className="my-6">
               <h1 className="text-green2 font-semibold text-2xl text-center">
-                {user && user.nama}
+                {dataHome.data && dataHome.data.user.nama}
               </h1>
               <h4 className="font-semibold text-base text-gray2">
-                {user && user.email}
+                {dataHome.data && dataHome.data.user.email}
               </h4>
             </div>
             <div>
               <div className="flex justify-center">
                 <div className="flex items-center rounded-lg p-2 shadow-md border mr-4">
-                  <IconMale className="mr-2" />
+                  {dataHome.data && dataHome.data.user.jenis_kelamin === "L" ? (
+                    <IconMale className="mr-2" />
+                  ) : dataHome.data &&
+                    dataHome.data.user.jenis_kelamin === "P" ? (
+                    <IconFemale className="mr-2" />
+                  ) : (
+                    ""
+                  )}
                   <p className="text-green2 font-semibold text-base">
-                    {user && user.jenis_kelamin === "L"
+                    {dataHome.data && dataHome.data.user.jenis_kelamin === "L"
                       ? "Laki -laki"
-                      : "Perempuan"}
+                      : dataHome.data &&
+                        dataHome.data.user.jenis_kelamin === "P"
+                      ? "Perempuan"
+                      : ""}
                   </p>
                 </div>
                 <div className="flex items-center rounded-lg p-2 shadow-md border">
                   <IconTanggal className="mr-2" />
                   <p className="text-green2 font-semibold text-base">
-                    {user && user.tanggal_lahir}
+                    {dataHome.data && dataHome.data.user.tanggal_lahir}
                   </p>
                 </div>
               </div>
@@ -333,26 +303,30 @@ export default function Home() {
                   <IconPager className="mr-2" />
                   <p className="text-green2 font-semibold text-base whitespace-nowrap">
                     <span className="font-light text-gray4 mr-2">Id Tes</span>
-                    {user && user.id}
+                    {dataHome.data && dataHome.data.user.id}
                   </p>
                 </div>
                 <div className="flex items-center rounded-lg p-2 shadow-md border mt-4">
                   <IconPhone className="mr-2" />
                   <p className="text-green2 font-semibold text-base">
-                    {user && user.telepon}
+                    {dataHome.data && dataHome.data.user.telepon}
                   </p>
                 </div>
               </div>
             </div>
-            <button
-              className="px-6 py-2 my-10 rounded-lg bg-blue opacity-50 text-white hover:bg-opacity-80 duration-200 text-center cursor-not-allowed outline-none focus:outline-none"
-              disabled
-            >
-              Mulai Simulasi
-            </button>
-            <div className="grid sm:grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 w-full pb-12">
-              {sesi_ujian &&
-                sesi_ujian.map((items, i) => {
+            {dataCekUjian.data && dataCekUjian.data.is_ujian === true ? (
+              ""
+            ) : (
+              <button
+                className="px-6 py-2 mt-10 rounded-lg bg-blue  text-white hover:bg-opacity-80 duration-200 text-center outline-none focus:outline-none"
+                onClick={() => history.push("/quis")}
+              >
+                Mulai Simulasi
+              </button>
+            )}
+            <div className="grid sm:grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 w-full pb-12 mt-10">
+              {dataHome.data &&
+                dataHome.data.sesi_ujian.map((items, i) => {
                   return (
                     <div className="col-span-1 mt-6 sm:mt-0" key={i}>
                       <div className="shadow-lg border rounded-lg p-4 relative">
@@ -380,14 +354,20 @@ export default function Home() {
                             {items.nama_sesi_ujian}
                           </p>
                         </div>
-                        <button
-                          className="px-4 py-2 bg-orange rounded-lg text-white text-sm hover:bg-opacity-80 duration-200 focus:outline-none absolute right-0 -bottom-5"
-                          onClick={() =>
-                            verifikasiImage(items.id_sesi_ujian, i)
-                          }
-                        >
-                          Mulai tes
-                        </button>
+                        {dataCekUjian.data &&
+                        dataCekUjian.data.is_ujian === true ? (
+                          ""
+                        ) : (
+                          <button
+                            className="px-4 py-2 bg-orange rounded-lg text-white text-sm hover:bg-opacity-80 duration-200 focus:outline-none absolute right-0 -bottom-5"
+                            // onClick={() =>
+                            //   dispatch(getDataCheckUjian(items.id_sesi_ujian))
+                            // }
+                            onClick={() => verifikasiImage(items.id_sesi_ujian)}
+                          >
+                            Mulai tes
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
