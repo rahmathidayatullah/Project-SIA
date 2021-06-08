@@ -52,10 +52,10 @@ export const sendImageAndGetExam = (id, dataImageSend) => {
   return async (dispatch, getState) => {
     try {
       let { data } = await getDataQuizByID(id, dataImageSend);
-      // console.log("data quiz action:", data);
+      console.log("data quiz action:", data);
       // console.log("data quiz just object:", data);
-      let datas = data.data.soal;
-      dispatch(successGetDataQuizByID(datas));
+      // let datas = data.data.soal;
+      dispatch(successGetDataQuizByID(data));
     } catch (error) {
       console.log("error getDataQuizByID", error);
       console.log("error getDataQuizByID reponse", error.response);

@@ -56,7 +56,7 @@ export default function reducer(state = initialState, action) {
     case SUCCESS_GET_DATA_QUIZ_BY_ID:
       return {
         ...state,
-        dataQuiz: action.data,
+        dataQuiz: action.datas,
       };
 
     default:

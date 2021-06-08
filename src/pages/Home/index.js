@@ -29,6 +29,7 @@ export default function Home() {
   const [image, setImage] = React.useState("");
   const [indexSesiQuis, setIndexSesiQuis] = useState(0);
   const [idUjian, setIdUjian] = useState(0);
+
   // API Home
   const dataHome = useSelector((state) => state.home.data);
   // console.log("dataHome :", dataHome);
@@ -42,7 +43,6 @@ export default function Home() {
   const dataSendImageBeforeExam = useSelector(
     (state) => state.quizApi.dataQuiz
   );
-  console.log("data Quiz :", dataSendImageBeforeExam);
   // API Kirim Jawaban Soal Ujian
   const dataSendAnswer = useSelector((state) => state.home.kirimJawanSoalUjian);
   // Func Button Mulai Tes
@@ -51,20 +51,23 @@ export default function Home() {
     setIdUjian(id_sesi_ujian);
     dispatch(getDataCheckUjian(id_sesi_ujian));
   };
+  console.log("idUjian out line", idUjian);
   // Func Button Ambil Foto
   const capture = React.useCallback(async () => {
-    // base 64
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
-    // send server
-    let dataImageSend = { photo: imageSrc };
-
-    setModalLoad(true);
-    dispatch(sendImageAndGetExam(idUjian, imageSrc, dataImageSend));
-    setTimeout(() => {
-      history.push("/quisApi");
-    }, 2500);
+    // let dataImageSend = { photo: imageSrc };
+    // console.log("idUjian,dataImageSend", idUjian, dataImageSend);
+    // setModalLoad(true);
   }, [webcamRef]);
+
+  const sendImage = () => {
+    let dataImageSend = { photo: image };
+    console.log("dataImageSend,idUjian", dataImageSend, idUjian);
+    dispatch(sendImageAndGetExam(idUjian, dataImageSend));
+    history.push("/quisApi");
+    // window.location.href = "/quisApi";
+  };
 
   const logout = () => {
     setToggleLogout("opacity-0");
@@ -82,6 +85,10 @@ export default function Home() {
     dispatch(fetchDataHome());
     dispatch(ujianStatusCheck());
   }, []);
+
+  // useEffect(() => {
+  //   sendImage();
+  // }, [image]);
 
   return (
     <div className="w-screen lg:h-screen bg-home relative lg:p-0 overflow-y-scroll lg:overflow-hidden z-20">
@@ -355,7 +362,7 @@ export default function Home() {
                           </p>
                         </div>
                         {dataCekUjian.data &&
-                        dataCekUjian.data.is_ujian === true ? (
+                        dataCekUjian.data.is_ujian === false ? (
                           ""
                         ) : (
                           <button
