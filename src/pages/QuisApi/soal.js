@@ -17,7 +17,9 @@ export default function Soal() {
   );
 
   const handleErrorSoal = () => {
-    alert("cuy santai cuy");
+    alert(
+      "error hapus dulu localstorage nya terus reload lagi, karena data soal nya gada."
+    );
     localStorage.removeItem("idUjian");
     localStorage.removeItem("listSoal");
     localStorage.removeItem("soalSingle");
@@ -36,8 +38,10 @@ export default function Soal() {
     );
   };
 
-  const selectAnswer = () => {
-    console.log();
+  const selectAnswer = (idJawaban, index) => {
+    console.log("idJawaban", idJawaban);
+    console.log("index", index);
+    console.log("id", id);
   };
 
   // const [field, setField] = React.useState({
@@ -81,7 +85,7 @@ export default function Soal() {
           return (
             <button
               className="rounded-lg text-xs border-green1 border bg-green1 text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none"
-              onClick={() => selectAnswer(item.id)}
+              onClick={() => selectAnswer(item.id, i)}
             >
               {item.alfabet}. {item.jawaban}
             </button>
