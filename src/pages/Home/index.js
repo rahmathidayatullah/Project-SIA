@@ -18,6 +18,7 @@ import IconPager from "assets/icon/Pager";
 import IconPhone from "assets/icon/Phone";
 import { getDataCheckUjian, ujianStatusCheck } from "features/Home/action";
 import { sendImageAndGetExam } from "features/QuizApi/action";
+import { getDataQuizByID } from "api/home";
 
 export default function Home() {
   let dispatch = useDispatch();
@@ -28,7 +29,6 @@ export default function Home() {
   const webcamRef = React.useRef(null);
   const [image, setImage] = React.useState("");
   const [indexSesiQuis, setIndexSesiQuis] = useState(0);
-  const [idUjian, setIdUjian] = useState(0);
 
   // API Home
   const dataHome = useSelector((state) => state.home.data);
@@ -43,31 +43,45 @@ export default function Home() {
   const dataSendImageBeforeExam = useSelector(
     (state) => state.quizApi.dataQuiz
   );
+
   // API Kirim Jawaban Soal Ujian
   const dataSendAnswer = useSelector((state) => state.home.kirimJawanSoalUjian);
+
   // Func Button Mulai Tes
   const verifikasiImage = (id_sesi_ujian) => {
     setShowModal(true);
-    setIdUjian(id_sesi_ujian);
+    localStorage.setItem("idUjian", id_sesi_ujian);
     dispatch(getDataCheckUjian(id_sesi_ujian));
   };
-  console.log("idUjian out line", idUjian);
   // Func Button Ambil Foto
   const capture = React.useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
-    // let dataImageSend = { photo: imageSrc };
-    // console.log("idUjian,dataImageSend", idUjian, dataImageSend);
-    // setModalLoad(true);
-  }, [webcamRef]);
-
-  const sendImage = () => {
-    let dataImageSend = { photo: image };
+    let dataImageSend = { photo: imageSrc };
+    let idUjian = localStorage.getItem("idUjian");
     console.log("dataImageSend,idUjian", dataImageSend, idUjian);
-    dispatch(sendImageAndGetExam(idUjian, dataImageSend));
-    history.push("/quisApi");
-    // window.location.href = "/quisApi";
-  };
+
+    let { data } = await getDataQuizByID(idUjian, dataImageSend);
+
+    if (data.data === undefined) {
+      console.log("data gagal");
+    } else {
+      console.log("data berhasil");
+    }
+
+    // dispatch(sendImageAndGetExam(dataImageSend));
+
+    // setModalLoad(true);
+    // setTimeout(() => {
+    //   if (dataSendImageBeforeExam.length === 0) {
+    //     console.log("data 0");
+    //   } else {
+    //     console.log("berhasil");
+    //   }
+    // }, 5000);
+
+    // history.push("/quisApi");
+  }, [webcamRef]);
 
   const logout = () => {
     setToggleLogout("opacity-0");
@@ -85,10 +99,6 @@ export default function Home() {
     dispatch(fetchDataHome());
     dispatch(ujianStatusCheck());
   }, []);
-
-  // useEffect(() => {
-  //   sendImage();
-  // }, [image]);
 
   return (
     <div className="w-screen lg:h-screen bg-home relative lg:p-0 overflow-y-scroll lg:overflow-hidden z-20">

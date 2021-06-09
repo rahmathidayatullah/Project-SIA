@@ -55,6 +55,7 @@ export const sendImageAndGetExam = (id, dataImageSend) => {
       console.log("data quiz action:", data);
       // console.log("data quiz just object:", data);
       // let datas = data.data.soal;
+      // alert("asdf");
       dispatch(successGetDataQuizByID(data));
     } catch (error) {
       console.log("error getDataQuizByID", error);
