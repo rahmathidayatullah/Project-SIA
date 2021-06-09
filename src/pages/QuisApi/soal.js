@@ -1,23 +1,65 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-import { fetchQuiz, goToNextPage, goToPrevPage } from "features/QuizApi/action";
+import { goToNextPage, goToPrevPage } from "features/QuizApi/action";
 import { optionSelect } from "features/Quiz/action";
 
 export default function Soal() {
   let dispatch = useDispatch();
-
+  let history = useHistory();
   // API Kirim Foto Sebelum Ujian
   const dataSendImageBeforeExam = useSelector((state) => state.home.datQuiz);
-  console.log("data Quiz :", dataSendImageBeforeExam);
   //
-  const dataQuiz = useSelector((state) => state.quizApi.dataQuizByIndex);
-  //
-  const dataQuizApi = useSelector((state) => state.quizApi);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [soal, setSoal] = useState(
+    JSON.parse(localStorage.getItem("listSoal"))
+  );
 
-  useEffect(() => {
-    dispatch(fetchQuiz());
-  }, [dataQuizApi.currentIndex]);
+  const handleErrorSoal = () => {
+    alert("cuy santai cuy");
+    localStorage.removeItem("idUjian");
+    localStorage.removeItem("listSoal");
+    localStorage.removeItem("soalSingle");
+    history.push("/home");
+  };
+
+  const { id, question, option } =
+    soal[currentIndex] === undefined ? handleErrorSoal() : soal[currentIndex];
+
+  const goToPrevPage = () => {
+    setCurrentIndex(currentIndex === 0 ? currentIndex - 0 : currentIndex - 1);
+  };
+  const goToNextPage = () => {
+    setCurrentIndex(
+      currentIndex === soal.length - 1 ? currentIndex + 0 : currentIndex + 1
+    );
+  };
+
+  // const [field, setField] = React.useState({
+  //   id: "",
+  // });
+
+  // const fetchSoal = () => {
+  //   let a = JSON.parse(localStorage.getItem("listSoal"));
+  //   setSoal(a);
+  //   setField({ ...field, id: a[currentIndex].id });
+  // };
+  // useEffect(() => {
+  //   fetchSoal();
+  //   // dispatch(fetchQuiz());
+  // }, []);
+
+  // const filterSoal = (currentIndex) => {
+  //   setField({ ...field, id: soal[currentIndex].id });
+  // };
+
+  // const goToNextPage = () => {
+  //   setCurrentIndex(currentIndex + 1);
+  //   filterSoal(currentIndex + 1);
+  // };
+
+  useEffect(() => {}, []);
 
   return (
     <div className="border relative overflow-y-scroll h-auto md:h-86vh">
@@ -26,21 +68,22 @@ export default function Soal() {
         style={{ height: "77vh" }}
       >
         <h1 className="font-semibold">
-          {dataQuiz && dataQuiz.id}. {dataQuiz && dataQuiz.question}
+          {/* {soal.id}. {soal.question} */}
+          {/* {field.id} */}
+          {id}
+          {question}
         </h1>
-
-        {/* {dataSingle.option &&
-          dataSingle.option.map((item, i) => {
-            return (
-              <button className="rounded-lg text-xs border-green1 border bg-green1 text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none">
-                {item.alfabet}. {item.jawaban}
-              </button>
-            );
-          })} */}
+        {option.map((item, i) => {
+          return (
+            <button className="rounded-lg text-xs border-green1 border bg-green1 text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none">
+              {item.alfabet}. {item.jawaban}
+            </button>
+          );
+        })}
         {/* {console.log(
           "dataSingle.option",
           dataSingle.option && dataSingle.option
-        )} */}
+        )}
 
         {/* {console.log("dataSoal.data", dataSoal.data.soal)} */}
       </div>
@@ -48,13 +91,13 @@ export default function Soal() {
         <div className="flex justify-between sm:justify-start w-full sm:w-auto items-center order-2 sm:order-none mt-5 sm:mt-0">
           <button
             className="px-4 py-2 bg-blue rounded-lg text-white text-sm mr-3 hover:bg-opacity-80 duration-200 focus:outline-none"
-            onClick={() => dispatch(goToPrevPage())}
+            onClick={() => goToPrevPage()}
           >
             Sebelumnya
           </button>
           <button
             className="px-4 py-2 bg-blue rounded-lg text-white text-sm hover:bg-opacity-80 duration-200 focus:outline-none"
-            onClick={() => dispatch(goToNextPage())}
+            onClick={() => goToNextPage()}
           >
             Lanjut
           </button>

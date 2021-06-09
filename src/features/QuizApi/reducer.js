@@ -1,10 +1,8 @@
-import { startQuiz } from "features/Quiz/action";
 import {
-  ERROR_FETCHING_QUIZ,
-  SUCCESS_FETCHING_QUIZ,
   PREV_PAGE,
   NEXT_PAGE,
   SUCCESS_GET_DATA_QUIZ_BY_ID,
+  SUCCESS_GET_QUIZ,
 } from "./constants";
 
 const statuslist = {
@@ -25,16 +23,6 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case SUCCESS_FETCHING_QUIZ:
-      return {
-        ...state,
-        status: statuslist.success,
-        dataQuizByIndex: action.data,
-      };
-
-    case ERROR_FETCHING_QUIZ:
-      return { ...state, status: statuslist.error };
-
     case NEXT_PAGE:
       return {
         ...state,
@@ -57,6 +45,12 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         dataQuiz: action.data,
+      };
+
+    case SUCCESS_GET_QUIZ:
+      return {
+        ...state,
+        dataQuizByIndex: action.dataSingle,
       };
 
     default:

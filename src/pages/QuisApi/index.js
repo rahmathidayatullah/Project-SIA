@@ -21,7 +21,7 @@ export default function Index() {
   const id_ujian = useSelector((state) => state.home.id_ujian);
 
   const data1 = new Date();
-  const waktucustom = moment(data1).add(3, "seconds").format("LL HH:mm:ss");
+  const waktucustom = moment(data1).add(10, "seconds").format("LL HH:mm:ss");
   const [timeDuration, setTimeDuration] = useState({
     hari: 0,
     jam: 0,
@@ -64,6 +64,13 @@ export default function Index() {
         });
       }
     }, 1000);
+  };
+
+  const closeModal = () => {
+    localStorage.removeItem("idUjian");
+    localStorage.removeItem("listSoal");
+    localStorage.removeItem("soalSingle");
+    history.push("/home");
   };
 
   const webcamRef = React.useRef(null);
@@ -293,7 +300,7 @@ export default function Index() {
         </div>
         <Modal
           show={isShow}
-          close={() => history.push("/home")}
+          close={() => closeModal()}
           header={
             <h1 className="absolute left-1/2 transform -translate-x-1/2">
               Modal title
@@ -307,7 +314,7 @@ export default function Index() {
               <footer className="absolute bottom-0 w-full left-0 border-t flex justify-center pb-2">
                 <button
                   className="mt-2 px-6 py-2 rounded-lg bg-blue text-white hover:bg-opacity-80 duration-200 text-center cursor-pointer outline-none focus:outline-none"
-                  onClick={() => history.push("/home")}
+                  onClick={() => closeModal()}
                 >
                   Kembali ke halaman utama
                 </button>

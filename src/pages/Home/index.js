@@ -17,7 +17,10 @@ import IconTanggal from "assets/icon/Tanggal";
 import IconPager from "assets/icon/Pager";
 import IconPhone from "assets/icon/Phone";
 import { getDataCheckUjian, ujianStatusCheck } from "features/Home/action";
-import { sendImageAndGetExam } from "features/QuizApi/action";
+import {
+  sendImageAndGetExam,
+  fetchGetDataQuizByID,
+} from "features/QuizApi/action";
 import { getDataQuizByID } from "api/home";
 
 export default function Home() {
@@ -47,6 +50,10 @@ export default function Home() {
   // API Kirim Jawaban Soal Ujian
   const dataSendAnswer = useSelector((state) => state.home.kirimJawanSoalUjian);
 
+  // Response from reduce action quizApi
+  const quizApi = useSelector((state) => state.quizApi.dataQuizByIndex);
+  console.log("quizApi", quizApi);
+
   // Func Button Mulai Tes
   const verifikasiImage = (id_sesi_ujian) => {
     setShowModal(true);
@@ -66,7 +73,11 @@ export default function Home() {
     if (data.data === undefined) {
       console.log("data gagal");
     } else {
-      console.log("data berhasil");
+      console.log("data berhasil", data.data.soal);
+      localStorage.setItem("listSoal", JSON.stringify(data.data.soal));
+      dispatch(fetchGetDataQuizByID(data.data.soal));
+
+      history.push("/quisApi");
     }
 
     // dispatch(sendImageAndGetExam(dataImageSend));
@@ -98,6 +109,10 @@ export default function Home() {
   useEffect(() => {
     dispatch(fetchDataHome());
     dispatch(ujianStatusCheck());
+
+    if (localStorage.getItem("idUjian")) {
+      history.push("/quisApi");
+    }
   }, []);
 
   return (
