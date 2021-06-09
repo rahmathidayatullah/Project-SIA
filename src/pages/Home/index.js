@@ -33,6 +33,9 @@ export default function Home() {
   const [image, setImage] = React.useState("");
   const [indexSesiQuis, setIndexSesiQuis] = useState(0);
 
+  const status = useSelector((state) => state.home.status);
+  console.log("status", status);
+
   // API Home
   const dataHome = useSelector((state) => state.home.data);
   // console.log("dataHome :", dataHome);
@@ -68,6 +71,7 @@ export default function Home() {
     let idUjian = localStorage.getItem("idUjian");
     console.log("dataImageSend,idUjian", dataImageSend, idUjian);
 
+    setModalLoad(true);
     let { data } = await getDataQuizByID(idUjian, dataImageSend);
 
     if (data.data === undefined) {
@@ -77,7 +81,9 @@ export default function Home() {
       localStorage.setItem("listSoal", JSON.stringify(data.data.soal));
       dispatch(fetchGetDataQuizByID(data.data.soal));
 
-      history.push("/quisApi");
+      setTimeout(() => {
+        history.push("/quisApi");
+      }, 5000);
     }
 
     // dispatch(sendImageAndGetExam(dataImageSend));
@@ -357,7 +363,19 @@ export default function Home() {
               </button>
             )}
             <div className="grid sm:grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 w-full pb-12 mt-10">
-              {dataHome.data &&
+              {status === "process" ? (
+                <div className="fixed inset-0 bg-black bg-opacity-60 z-50">
+                  <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <ReactLoading
+                      type={"bars"}
+                      color={"#B7BDC9"}
+                      height={168}
+                      width={120}
+                    />
+                  </div>
+                </div>
+              ) : (
+                dataHome.data &&
                 dataHome.data.sesi_ujian.map((items, i) => {
                   return (
                     <div className="col-span-1 mt-6 sm:mt-0" key={i}>
@@ -403,7 +421,8 @@ export default function Home() {
                       </div>
                     </div>
                   );
-                })}
+                })
+              )}
             </div>
           </div>
         </div>

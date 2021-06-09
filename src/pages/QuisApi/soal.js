@@ -36,6 +36,10 @@ export default function Soal() {
     );
   };
 
+  const selectAnswer = () => {
+    console.log();
+  };
+
   // const [field, setField] = React.useState({
   //   id: "",
   // });
@@ -75,7 +79,10 @@ export default function Soal() {
         </h1>
         {option.map((item, i) => {
           return (
-            <button className="rounded-lg text-xs border-green1 border bg-green1 text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none">
+            <button
+              className="rounded-lg text-xs border-green1 border bg-green1 text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none"
+              onClick={() => selectAnswer(item.id)}
+            >
               {item.alfabet}. {item.jawaban}
             </button>
           );
