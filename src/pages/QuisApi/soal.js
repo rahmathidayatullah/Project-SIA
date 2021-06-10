@@ -38,11 +38,40 @@ export default function Soal() {
     );
   };
 
-  const selectAnswer = (idJawaban, index) => {
-    console.log("idJawaban", idJawaban);
-    console.log("index", index);
-    console.log("id", id);
+  const selectAnswer = (idJawaban, i) => {
+    // let temp = [...soal];
+
+    // temp.forEach((cur) => {
+    //   cur?.option.forEach((curChild, i) => {
+    //     if (curChild.id === idJawaban) {
+    //       curChild.isChecked = true;
+    //     } else {
+    //       curChild.isChecked = false;
+    //     }
+    //   });
+    // });
+
+    // temp[currentIndex].option[index]["isChecked"] = true;
+    // temp[currentIndex]["isChecked"] = true;
+    setSoal(
+      soal.map((item, index) =>
+        index === currentIndex
+          ? {
+              ...item,
+              isChecked: true,
+              option: option.map((items, index) =>
+                index === i
+                  ? { ...items, isChecked: true }
+                  : { ...items, isChecked: false }
+              ),
+            }
+          : item
+      )
+    );
+
+    console.log(soal);
   };
+  // console.log(soal);
 
   // const [field, setField] = React.useState({
   //   id: "",
@@ -84,7 +113,9 @@ export default function Soal() {
         {option.map((item, i) => {
           return (
             <button
-              className="rounded-lg text-xs border-green1 border bg-green1 text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none"
+              className={`rounded-lg text-xs border-green1 border ${
+                item.isChecked === false ? "bg-green1" : "bg-blue"
+              } text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none`}
               onClick={() => selectAnswer(item.id, i)}
             >
               {item.alfabet}. {item.jawaban}

@@ -78,8 +78,30 @@ export default function Home() {
       console.log("data gagal");
     } else {
       console.log("data berhasil", data.data.soal);
-      localStorage.setItem("listSoal", JSON.stringify(data.data.soal));
-      dispatch(fetchGetDataQuizByID(data.data.soal));
+
+      let parrents = [];
+      data.data.soal.forEach((parrent) => {
+        let childs = [];
+        parrent.option.forEach((child) => {
+          childs.push({
+            id: child.id,
+            alfabet: child.alfabet,
+            jawaban: child.jawaban,
+            isChecked: false,
+          });
+        });
+        parrents.push({
+          id: parrent.id,
+          question: parrent.question,
+          option: childs,
+          isChecked: false,
+        });
+      });
+      console.log("parrents");
+      console.log(parrents);
+
+      localStorage.setItem("listSoal", JSON.stringify(parrents));
+      // dispatch(fetchGetDataQuizByID(data.data.soal));
 
       setTimeout(() => {
         history.push("/quisApi");
