@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-
-import { goToNextPage, goToPrevPage } from "features/QuizApi/action";
-import { optionSelect } from "features/Quiz/action";
+import {
+  fetchQuiz,
+  selectOption,
+  goToNextPage,
+  goToPrevPage,
+} from "features/QuizApi/action";
 
 export default function Soal() {
   let dispatch = useDispatch();
   let history = useHistory();
   const [hasilSelect, setHasilSelect] = useState(0);
+  const { id, question, option } = useSelector((state) => state.quizApi.data);
+  const dataQuizSingle = useSelector((state) => state.quizApi);
+  // console.log("id", id);
   // API Kirim Foto Sebelum Ujian
   const dataSendImageBeforeExam = useSelector((state) => state.home.datQuiz);
   //
@@ -28,17 +34,8 @@ export default function Soal() {
     history.push("/home");
   };
 
-  const { id, question, option } =
-    soal[currentIndex] === undefined ? handleErrorSoal() : soal[currentIndex];
-
-  const goToPrevPage = () => {
-    setCurrentIndex(currentIndex === 0 ? currentIndex - 0 : currentIndex - 1);
-  };
-  const goToNextPage = () => {
-    setCurrentIndex(
-      currentIndex === soal.length - 1 ? currentIndex + 0 : currentIndex + 1
-    );
-  };
+  // const { id, question, option } =
+  //   soal[currentIndex] === undefined ? handleErrorSoal() : soal[currentIndex];
 
   const selectAnswer = (idJawaban, i, item) => {
     // setSoal(
@@ -56,28 +53,24 @@ export default function Soal() {
     //       : item
     //   )
     // );
-    let data = soal.map((item, index) =>
-      index === currentIndex
-        ? {
-            ...item,
-            isChecked: true,
-            option: option.map((items, index) =>
-              index === i
-                ? { ...items, isChecked: true }
-                : { ...items, isChecked: false }
-            ),
-          }
-        : item
-    );
-
-    const select = data.filter((item, i) => item.isChecked === true);
-
-    const totalSelect = select.length;
-
-    const hasilSelect = (totalSelect / soal.length) * 100;
-
-    setSoal(data);
-    setHasilSelect(hasilSelect);
+    // let data = soal.map((item, index) =>
+    //   index === currentIndex
+    //     ? {
+    //         ...item,
+    //         isChecked: true,
+    //         option: option.map((items, index) =>
+    //           index === i
+    //             ? { ...items, isChecked: true }
+    //             : { ...items, isChecked: false }
+    //         ),
+    //       }
+    //     : item
+    // );
+    // const select = data.filter((item, i) => item.isChecked === true);
+    // const totalSelect = select.length;
+    // const hasilSelect = (totalSelect / soal.length) * 100;
+    // setSoal(data);
+    // setHasilSelect(hasilSelect);
   };
 
   // const [field, setField] = React.useState({
@@ -103,7 +96,9 @@ export default function Soal() {
   //   filterSoal(currentIndex + 1);
   // };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch(fetchQuiz());
+  }, [dispatch, dataQuizSingle.currentIndex, dataQuizSingle.totalSelect]);
 
   return (
     <div className="border relative overflow-y-scroll h-auto md:h-86vh">
@@ -117,18 +112,20 @@ export default function Soal() {
           {id}
           {question}
         </h1>
-        {option.map((item, i) => {
-          return (
-            <button
-              className={`rounded-lg text-xs border-green1 border ${
-                item.isChecked === false ? "bg-green1" : "bg-blue"
-              } text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none`}
-              onClick={() => selectAnswer(item.id, i, item)}
-            >
-              {item.alfabet}. {item.jawaban}
-            </button>
-          );
-        })}
+        {option &&
+          option.map((item, i) => {
+            return (
+              <button
+                className={`rounded-lg text-xs border-green1 border ${
+                  item.isChecked === false ? "bg-green1" : "bg-blue"
+                } text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none`}
+                // onClick={() => selectAnswer(item.id, i, item)}
+                onClick={() => dispatch(selectOption(i))}
+              >
+                {item.alfabet}. {item.jawaban}
+              </button>
+            );
+          })}
         {/* {console.log(
           "dataSingle.option",
           dataSingle.option && dataSingle.option
@@ -140,13 +137,13 @@ export default function Soal() {
         <div className="flex justify-between sm:justify-start w-full sm:w-auto items-center order-2 sm:order-none mt-5 sm:mt-0">
           <button
             className="px-4 py-2 bg-blue rounded-lg text-white text-sm mr-3 hover:bg-opacity-80 duration-200 focus:outline-none"
-            onClick={() => goToPrevPage()}
+            onClick={() => dispatch(goToPrevPage())}
           >
             Sebelumnya
           </button>
           <button
             className="px-4 py-2 bg-blue rounded-lg text-white text-sm hover:bg-opacity-80 duration-200 focus:outline-none"
-            onClick={() => goToNextPage()}
+            onClick={() => dispatch(goToNextPage())}
           >
             Lanjut
           </button>
@@ -154,22 +151,23 @@ export default function Soal() {
         <div className="flex items-center order-1 sm:order-none mt-2 sm:mt-0">
           <p className="text-xs text-gray-600 mr-3">Progress</p>
           <div className="w-56 h-6 rounded-2xl bg-white relative border overflow-hidden">
-            {console.log("hasilSelect", hasilSelect)}
             <div
               className="absolute inset-0 bg-green1 rounded-2xl"
               style={{
-                width: hasilSelect + "%",
+                width: dataQuizSingle.totalSelect + "%",
               }}
             >
               <p
                 className={`absolute ${
-                  hasilSelect === 0 ? "text-green1" : "text-white"
+                  dataQuizSingle.totalSelect === 0
+                    ? "text-green1"
+                    : "text-white"
                 } top-1/2 transform left-1 -translate-y-1/2 text-litle`}
               >
-                {hasilSelect === 0 ? (
+                {dataQuizSingle.totalSelect === 0 ? (
                   <p>0%</p>
                 ) : (
-                  parseFloat(hasilSelect).toFixed(1) + "%"
+                  parseFloat(dataQuizSingle.totalSelect).toFixed(1) + "%"
                 )}
               </p>
             </div>
