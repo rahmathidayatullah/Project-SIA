@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import "assets/styles/login.css";
 import "assets/styles/style.css";
+import "assets/styles/soal.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import store from "app/store";

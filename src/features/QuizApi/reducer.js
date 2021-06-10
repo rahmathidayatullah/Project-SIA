@@ -7,7 +7,6 @@ import {
   SUCCESS_FETCHING_QUIZ,
   SELECT_OPTION,
   CHANGE_CURRENT_INDEX,
-  SUCCESS_JAWABAN_DATA_SEND,
 } from "./constants";
 
 const statuslist = {
@@ -37,8 +36,6 @@ const initialState = {
   dataQuizByIndex: [],
   currentIndex: 0,
   // jawaban exam
-  //
-  jawaban: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -102,12 +99,6 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         currentIndex: action.i,
-      };
-
-    case SUCCESS_JAWABAN_DATA_SEND:
-      return {
-        ...state,
-        jawaban: action.data,
       };
 
     default:

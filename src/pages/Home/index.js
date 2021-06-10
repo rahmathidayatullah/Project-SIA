@@ -375,7 +375,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {dataCekUjian.data && dataCekUjian.data.is_ujian === true ? (
+            {dataCekUjian.data && dataCekUjian.data.is_ujian === false ? (
               ""
             ) : (
               <button

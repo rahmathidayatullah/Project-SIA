@@ -6,7 +6,6 @@ import {
   selectOption,
   goToNextPage,
   goToPrevPage,
-  jawabanDataSend,
 } from "features/QuizApi/action";
 
 import { sendDataJawaban } from "api/home";
@@ -30,7 +29,6 @@ export default function Soal() {
 
   const submitExam = async () => {
     let temp = [];
-    console.log(soal);
     soal.forEach((parent) => {
       let idJawaban = 0;
       parent.option.forEach((child) => {
@@ -45,8 +43,6 @@ export default function Soal() {
     //
     let jawaban = { jawaban_soal: temp };
     let id = JSON.parse(localStorage.getItem("idUjian"));
-    // dispatch(jawabanDataSend(id, data));
-    // console.log("jawaban", jawaban);
     try {
       let { data } = await sendDataJawaban(id, jawaban);
       if (data.code === 200) {
@@ -78,28 +74,39 @@ export default function Soal() {
         className="p-4 overflow-y-scroll scroll-hidden"
         style={{ height: "77vh" }}
       >
-        <h1 className="font-semibold">
-          {id}
-          {question}
-        </h1>
-        {option &&
-          option.map((item, i) => {
-            return (
-              <button
-                className={`rounded-lg text-xs 
+        <div className="flex">
+          <h1 className="font-semibold">{dataQuizSingle.currentIndex + 1}.</h1>
+          <div
+            className="ml-2"
+            dangerouslySetInnerHTML={{ __html: question }}
+          />
+        </div>
+        <div className="flex flex-wrap mt-2">
+          {option &&
+            option.map((item, i) => {
+              return (
+                <button
+                  className={`rounded-lg text-xs
                   ${
                     item.selected === true
                       ? "border-green1 border bg-green1 text-white"
                       : "bg-transparent text-green1 border-green1 border hover:bg-green1 hover:text-white"
                   }
                         
-                        p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none`}
-                onClick={() => dispatch(selectOption(i))}
-              >
-                {item.alfabet}. {item.jawaban}
-              </button>
-            );
-          })}
+                        p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-2 focus:outline-none outline-none`}
+                  onClick={() => dispatch(selectOption(i))}
+                >
+                  <div className="flex">
+                    {item.alfabet}.
+                    <div
+                      className="ml-2 desc-option"
+                      dangerouslySetInnerHTML={{ __html: item.jawaban }}
+                    />
+                  </div>
+                </button>
+              );
+            })}
+        </div>
       </div>
       <div className="static md:absolute bottom-0 flex flex-wrap justify-between items-center w-full p-2">
         <div className="flex justify-between sm:justify-start w-full sm:w-auto items-center order-2 sm:order-none mt-5 sm:mt-0">

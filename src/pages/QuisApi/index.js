@@ -21,7 +21,7 @@ export default function Index() {
   const id_ujian = useSelector((state) => state.home.id_ujian);
 
   const data1 = new Date();
-  const waktucustom = moment(data1).add(90, "seconds").format("LL HH:mm:ss");
+  const waktucustom = moment(data1).add(90, "minutes").format("LL HH:mm:ss");
   const [timeDuration, setTimeDuration] = useState({
     hari: 0,
     jam: 0,
