@@ -7,7 +7,10 @@ import {
   SUCCESS_GET_QUIZ,
   SELECT_OPTION,
   CHANGE_CURRENT_INDEX,
+  SUCCESS_JAWABAN_DATA_SEND,
 } from "./constants";
+
+import { sendDataJawaban } from "api/home";
 
 export const fetchQuiz = () => {
   return (dispatch, getState) => {
@@ -82,6 +85,7 @@ export const selectOption = (indexOption) => {
           }
         : item;
     });
+    console.log("data", data);
     let fetch = true;
 
     // get data select
@@ -124,6 +128,24 @@ export const changeCurrentIndex = (i) => {
   return {
     type: CHANGE_CURRENT_INDEX,
     i,
+  };
+};
+
+export const jawabanDataSend = (id, jawaban) => {
+  return async (dispatch, getState) => {
+    try {
+      let { data } = await sendDataJawaban(id, jawaban);
+      dispatch(successJawabanDataSend(data));
+      console.log("datasadf asdfsafd`", data);
+    } catch (error) {
+      console.log("error");
+    }
+  };
+};
+export const successJawabanDataSend = (data) => {
+  return {
+    type: SUCCESS_JAWABAN_DATA_SEND,
+    data,
   };
 };
 

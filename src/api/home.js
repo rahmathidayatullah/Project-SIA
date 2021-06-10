@@ -56,3 +56,20 @@ export async function getDataQuizByID(id, dataImageSend) {
     }
   );
 }
+
+// UJIAN -> post kirim data jawaban
+export async function sendDataJawaban(id, data) {
+  let { token } = localStorage.getItem("auth")
+    ? JSON.parse(localStorage.getItem("auth"))
+    : {};
+
+  return await axios.post(
+    `${config.api_host}api/v1/submit-answer-exam/${id}`,
+    data,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}

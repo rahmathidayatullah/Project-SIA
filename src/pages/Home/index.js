@@ -129,6 +129,7 @@ export default function Home() {
   };
 
   const closeModalMulti = () => {
+    localStorage.removeItem("idUjian");
     setModalLoad(false);
     // setShowModal(true);
     setShowModal(false);
