@@ -8,10 +8,12 @@ import { optionSelect } from "features/Quiz/action";
 export default function Soal() {
   let dispatch = useDispatch();
   let history = useHistory();
+  const [hasilSelect, setHasilSelect] = useState(0);
   // API Kirim Foto Sebelum Ujian
   const dataSendImageBeforeExam = useSelector((state) => state.home.datQuiz);
   //
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selected, setSelected] = useState([]);
   const [soal, setSoal] = useState(
     JSON.parse(localStorage.getItem("listSoal"))
   );
@@ -38,40 +40,45 @@ export default function Soal() {
     );
   };
 
-  const selectAnswer = (idJawaban, i) => {
-    // let temp = [...soal];
-
-    // temp.forEach((cur) => {
-    //   cur?.option.forEach((curChild, i) => {
-    //     if (curChild.id === idJawaban) {
-    //       curChild.isChecked = true;
-    //     } else {
-    //       curChild.isChecked = false;
-    //     }
-    //   });
-    // });
-
-    // temp[currentIndex].option[index]["isChecked"] = true;
-    // temp[currentIndex]["isChecked"] = true;
-    setSoal(
-      soal.map((item, index) =>
-        index === currentIndex
-          ? {
-              ...item,
-              isChecked: true,
-              option: option.map((items, index) =>
-                index === i
-                  ? { ...items, isChecked: true }
-                  : { ...items, isChecked: false }
-              ),
-            }
-          : item
-      )
+  const selectAnswer = (idJawaban, i, item) => {
+    // setSoal(
+    //   soal.map((item, index) =>
+    //     index === currentIndex
+    //       ? {
+    //           ...item,
+    //           isChecked: true,
+    //           option: option.map((items, index) =>
+    //             index === i
+    //               ? { ...items, isChecked: true }
+    //               : { ...items, isChecked: false }
+    //           ),
+    //         }
+    //       : item
+    //   )
+    // );
+    let data = soal.map((item, index) =>
+      index === currentIndex
+        ? {
+            ...item,
+            isChecked: true,
+            option: option.map((items, index) =>
+              index === i
+                ? { ...items, isChecked: true }
+                : { ...items, isChecked: false }
+            ),
+          }
+        : item
     );
 
-    console.log(soal);
+    const select = data.filter((item, i) => item.isChecked === true);
+
+    const totalSelect = select.length;
+
+    const hasilSelect = (totalSelect / soal.length) * 100;
+
+    setSoal(data);
+    setHasilSelect(hasilSelect);
   };
-  // console.log(soal);
 
   // const [field, setField] = React.useState({
   //   id: "",
@@ -116,7 +123,7 @@ export default function Soal() {
               className={`rounded-lg text-xs border-green1 border ${
                 item.isChecked === false ? "bg-green1" : "bg-blue"
               } text-white p-2 mr-3 hover:bg-opacity-80 duration-200 cursor-pointer mt-2 sm:mt-0 focus:outline-none outline-none`}
-              onClick={() => selectAnswer(item.id, i)}
+              onClick={() => selectAnswer(item.id, i, item)}
             >
               {item.alfabet}. {item.jawaban}
             </button>
@@ -147,12 +154,23 @@ export default function Soal() {
         <div className="flex items-center order-1 sm:order-none mt-2 sm:mt-0">
           <p className="text-xs text-gray-600 mr-3">Progress</p>
           <div className="w-56 h-6 rounded-2xl bg-white relative border overflow-hidden">
-            <div className="absolute inset-0 bg-green1 rounded-2xl">
+            {console.log("hasilSelect", hasilSelect)}
+            <div
+              className="absolute inset-0 bg-green1 rounded-2xl"
+              style={{
+                width: hasilSelect + "%",
+              }}
+            >
               <p
-                className={`absolute"text-white"
+                className={`absolute ${
+                  hasilSelect === 0 ? "text-green1" : "text-white"
                 } top-1/2 transform left-1 -translate-y-1/2 text-litle`}
               >
-                <p>0%</p>
+                {hasilSelect === 0 ? (
+                  <p>0%</p>
+                ) : (
+                  parseFloat(hasilSelect).toFixed(1) + "%"
+                )}
               </p>
             </div>
           </div>
