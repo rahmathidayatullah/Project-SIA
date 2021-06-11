@@ -22,6 +22,8 @@ export default function Index() {
   const [image, setImage] = React.useState("");
   const jawaban = useSelector((state) => state.quizApi.jawaban);
   const id_ujian = JSON.parse(localStorage.getItem("idUjian"));
+  const sesi_ujian = localStorage.getItem("sesi_ujian");
+  console.log("sesi_ujian", sesi_ujian);
   const data1 = new Date();
   const waktucustom = moment(data1).add(30, "seconds").format("LL HH:mm:ss");
   const [timeDuration, setTimeDuration] = useState({
@@ -37,6 +39,7 @@ export default function Index() {
       if (data.code === 200) {
         localStorage.removeItem("idUjian");
         localStorage.removeItem("listSoal");
+        localStorage.removeItem("sesi_ujian");
         // alert("soal anda telah disubmit");
         // dispatch(reset());
         // history.push("/home");
@@ -116,13 +119,7 @@ export default function Index() {
               </p>
 
               <p className="font-semibold text-md mt-2 xsquis:mt-0 mt-2 border-b-4 border-gray-500">
-                {/* {id_ujian && id_ujian === 1
-                  ? "Sesi TKBI"
-                  : id_ujian === 2
-                  ? "Sesi TKDA"
-                  : id_ujian === 3
-                  ? "Sesi Prodi"
-                  : ""} */}
+                {sesi_ujian}
               </p>
 
               <div className="flex flex-wrap items-center mt-2 xsquis:mt-0 mb-3 xsquis:mb-0">

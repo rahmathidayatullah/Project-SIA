@@ -21,15 +21,15 @@ export default function Soal() {
   const jawaban = useSelector((state) => state.quizApi.jawaban);
   const id_ujian = JSON.parse(localStorage.getItem("idUjian"));
   console.log("jawaban", jawaban);
-  const handleErrorSoal = () => {
-    alert(
-      "error hapus dulu localstorage nya terus reload lagi, karena data soal nya gada."
-    );
-    localStorage.removeItem("idUjian");
-    localStorage.removeItem("listSoal");
-    localStorage.removeItem("soalSingle");
-    history.push("/home");
-  };
+  // const handleErrorSoal = () => {
+  //   alert(
+  //     "error hapus dulu localstorage nya terus reload lagi, karena data soal nya gada."
+  //   );
+  //   localStorage.removeItem("idUjian");
+  //   localStorage.removeItem("listSoal");
+  //   localStorage.removeItem("soalSingle");
+  //   history.push("/home");
+  // };
 
   // const submitExam = async () => {
   //   let temp = [];
@@ -70,6 +70,7 @@ export default function Soal() {
       if (data.code === 200) {
         localStorage.removeItem("idUjian");
         localStorage.removeItem("listSoal");
+        localStorage.removeItem("sesi_ujian");
         alert("soal anda telah disubmit");
         // dispatch(reset());
         // history.push("/home");

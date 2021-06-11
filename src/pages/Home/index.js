@@ -41,7 +41,7 @@ export default function Home() {
   // console.log("dataHome :", dataHome);
   // API Cek Ujian
   const dataCekUjian = useSelector((state) => state.home.cekUjian);
-  // console.log("dataCekUjian :", dataCekUjian);
+  console.log("dataCekUjian :", dataCekUjian);
   // API Mulai Sesi Ujian
   const dataMulaiSesiUjian = useSelector((state) => state.home.mulaiSesiUjian);
   // console.log("dataMulaiSesiUjian :", dataMulaiSesiUjian);
@@ -59,6 +59,12 @@ export default function Home() {
 
   // Func Button Mulai Tes
   const verifikasiImage = (id_sesi_ujian) => {
+    let dataUjian = dataHome.data.sesi_ujian.filter((element) => {
+      return element.id_sesi_ujian === id_sesi_ujian;
+    });
+    JSON.stringify(
+      localStorage.setItem("sesi_ujian", dataUjian[0].nama_sesi_ujian)
+    );
     setShowModal(true);
     localStorage.setItem("idUjian", id_sesi_ujian);
     dispatch(getDataCheckUjian(id_sesi_ujian));
