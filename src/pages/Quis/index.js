@@ -37,7 +37,7 @@ export default function Quiz() {
 
   const data1 = new Date();
 
-  const waktucustom = moment(data1).add(4, "minutes").format("LL HH:mm:ss");
+  const waktucustom = moment(data1).add(30, "seconds").format("LL HH:mm:ss");
 
   const [timeDuration, setTimeDuration] = useState({
     hari: 0,
