@@ -7,12 +7,15 @@ import {
   SUCCESS_GET_QUIZ,
   SELECT_OPTION,
   CHANGE_CURRENT_INDEX,
+  PUSH_DATA_ANSWER_ID,
+  RESET,
 } from "./constants";
 
 import { sendDataJawaban } from "api/home";
 
 export const fetchQuiz = () => {
   return (dispatch, getState) => {
+    console.log("FETCH DATA");
     let allDatas = JSON.parse(localStorage.getItem("listSoal"));
 
     // get default fetchKey from reduce
@@ -84,7 +87,52 @@ export const selectOption = (indexOption) => {
           }
         : item;
     });
-    console.log("data", data);
+    //
+    // for (let i = 0; i < data.length; i++) {
+    //   let array = [];
+    //   if (i === indexOption) {
+    //     let idSoal = 0;
+    //     let idJawaban = 0;
+    //     data.forEach((element) => {
+    //       if (element.selected) {
+    //         console.log("element", element);
+    //         idSoal = element.id;
+    //         element.option.forEach((items) => {
+    //           if (items.selected) {
+    //             console.log("items.id", items.id);
+    //             idJawaban = items.id;
+    //           }
+    //         });
+    //       }
+    //     });
+    //     let jawaban = { idSoal: idSoal, idJawaban: idJawaban };
+    //     array.push(jawaban);
+    //   }
+    //   console.log("array", array);
+    // }
+    let temp = [];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].selected) {
+        let idSoal = 0;
+        let idJawaban = 0;
+        idSoal = data[i].id;
+        // console.log("idJawaban", idSoal);
+        data[i].option.forEach((element) => {
+          if (element.selected) {
+            idJawaban = element.id;
+            // console.log("idJawaban", idJawaban);
+          }
+        });
+        let jawaban = { idSoal: idSoal, idJawaban: idJawaban };
+
+        temp.push(jawaban);
+
+        console.log("jawaban", jawaban);
+      }
+    }
+    let answerById = { jawaban_soal: temp };
+    dispatch(pushDataAnswerId(answerById));
+
     let fetch = true;
 
     // get data select
@@ -103,6 +151,13 @@ export const selectOption = (indexOption) => {
     );
 
     dispatch(fetchQuiz());
+  };
+};
+
+export const pushDataAnswerId = (answerById) => {
+  return {
+    type: PUSH_DATA_ANSWER_ID,
+    answerById,
   };
 };
 
@@ -130,6 +185,12 @@ export const changeCurrentIndex = (i) => {
   };
 };
 
+export const reset = () => {
+  return {
+    type: RESET,
+  };
+};
+
 //
 export const fetchGetDataQuizByID = (data) => {
   return async (dispatch, getState) => {
@@ -145,8 +206,8 @@ export const fetchGetDataQuizByID = (data) => {
     let dataSingleStorage = listSoal[currentIndex];
     localStorage.setItem("soalSingle", JSON.stringify(dataSingleStorage));
 
-    console.log("soalSingle", JSON.parse(localStorage.getItem("soalSingle")));
-    console.log("listSoal", JSON.parse(localStorage.getItem("listSoal")));
+    // console.log("soalSingle", JSON.parse(localStorage.getItem("soalSingle")));
+    // console.log("listSoal", JSON.parse(localStorage.getItem("listSoal")));
     dispatch(successGetQuiz(dataSingle));
   };
 };

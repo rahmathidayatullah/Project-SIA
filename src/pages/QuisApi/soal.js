@@ -6,6 +6,7 @@ import {
   selectOption,
   goToNextPage,
   goToPrevPage,
+  reset,
 } from "features/QuizApi/action";
 
 import { sendDataJawaban } from "api/home";
@@ -17,6 +18,9 @@ export default function Soal() {
   const dataQuizSingle = useSelector((state) => state.quizApi);
   const soal = useSelector((state) => state.quizApi.allData);
   const totalAnswer = useSelector((state) => state.quizApi.totalAnswer);
+  const jawaban = useSelector((state) => state.quizApi.jawaban);
+  const id_ujian = JSON.parse(localStorage.getItem("idUjian"));
+  console.log("jawaban", jawaban);
   const handleErrorSoal = () => {
     alert(
       "error hapus dulu localstorage nya terus reload lagi, karena data soal nya gada."
@@ -27,29 +31,49 @@ export default function Soal() {
     history.push("/home");
   };
 
+  // const submitExam = async () => {
+  //   let temp = [];
+  //   soal.forEach((parent) => {
+  //     let idJawaban = 0;
+  //     parent.option.forEach((child) => {
+  //       if (child.selected) {
+  //         idJawaban = child.id;
+  //       }
+  //     });
+  //     if (parent.selected) {
+  //       temp.push({ idSoal: parent.id, idJawaban: idJawaban });
+  //     }
+  //   });
+  //   //
+  //   let jawaban = { jawaban_soal: temp };
+  //   let id = JSON.parse(localStorage.getItem("idUjian"));
+  //   try {
+  //     let { data } = await sendDataJawaban(id, jawaban);
+  //     if (data.code === 200) {
+  //       localStorage.removeItem("idUjian");
+  //       localStorage.removeItem("listSoal");
+  //       alert("soal anda telah disubmit");
+  //       // dispatch(reset());
+  //       // history.push("/home");
+  //       window.location.href = "/home";
+  //     } else {
+  //       alert("gagal submit");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const submitExam = async () => {
-    let temp = [];
-    soal.forEach((parent) => {
-      let idJawaban = 0;
-      parent.option.forEach((child) => {
-        if (child.selected) {
-          idJawaban = child.id;
-        }
-      });
-      if (parent.selected) {
-        temp.push({ idSoal: parent.id, idJawaban: idJawaban });
-      }
-    });
-    //
-    let jawaban = { jawaban_soal: temp };
-    let id = JSON.parse(localStorage.getItem("idUjian"));
     try {
-      let { data } = await sendDataJawaban(id, jawaban);
+      let { data } = await sendDataJawaban(id_ujian, jawaban);
+      console.log("submit btn", data);
       if (data.code === 200) {
         localStorage.removeItem("idUjian");
         localStorage.removeItem("listSoal");
         alert("soal anda telah disubmit");
-        history.push("/home");
+        // dispatch(reset());
+        // history.push("/home");
+        window.location.href = "/home";
       } else {
         alert("gagal submit");
       }

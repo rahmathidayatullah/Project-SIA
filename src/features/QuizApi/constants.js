@@ -7,3 +7,5 @@ export const NEXT_PAGE = "features/QuizApi/NEXT_PAGE";
 export const SUCCESS_GET_DATA_QUIZ_BY_ID =
   "features/QuizApi/SUCCESS_GET_DATA_QUIZ_BY_ID";
 export const SUCCESS_GET_QUIZ = "features/QuizApi/SUCCESS_GET_QUIZ";
+export const PUSH_DATA_ANSWER_ID = "features/QuizApi/PUSH_DATA_ANSWER_ID";
+export const RESET = "features/QuizApi/RESET";

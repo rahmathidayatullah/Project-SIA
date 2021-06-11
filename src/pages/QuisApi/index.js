@@ -10,6 +10,8 @@ import { useHistory } from "react-router-dom";
 import Soal from "./soal";
 import NavigasiPengawas from "./navigasiPengawas";
 import moment from "moment";
+import { reset } from "features/QuizApi/action";
+import { sendDataJawaban } from "api/home";
 
 export default function Index() {
   let dispatch = useDispatch();
@@ -18,16 +20,34 @@ export default function Index() {
   const [showBantuan, setShowBantuan] = useState(false);
   const [showPengawas, setShowPengawas] = useState(false);
   const [image, setImage] = React.useState("");
-  const id_ujian = useSelector((state) => state.home.id_ujian);
-
+  const jawaban = useSelector((state) => state.quizApi.jawaban);
+  const id_ujian = JSON.parse(localStorage.getItem("idUjian"));
   const data1 = new Date();
-  const waktucustom = moment(data1).add(90, "minutes").format("LL HH:mm:ss");
+  const waktucustom = moment(data1).add(30, "seconds").format("LL HH:mm:ss");
   const [timeDuration, setTimeDuration] = useState({
     hari: 0,
     jam: 0,
     menit: 0,
     detik: 0,
   });
+  const submitExam = async () => {
+    try {
+      let { data } = await sendDataJawaban(id_ujian, jawaban);
+      console.log("data waktu habis", data);
+      if (data.code === 200) {
+        localStorage.removeItem("idUjian");
+        localStorage.removeItem("listSoal");
+        // alert("soal anda telah disubmit");
+        // dispatch(reset());
+        // history.push("/home");
+        // window.location.href = "/home";
+      } else {
+        alert("gagal submit");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const setTime = () => {
     const times = setInterval(() => {
       const tanggalTujuan = new Date(waktucustom).getTime();
@@ -54,6 +74,7 @@ export default function Index() {
           detik: 0,
         });
         setIsShow(true);
+        submitExam();
       } else {
         setTimeDuration({
           ...timeDuration,
@@ -70,7 +91,9 @@ export default function Index() {
     localStorage.removeItem("idUjian");
     localStorage.removeItem("listSoal");
     localStorage.removeItem("soalSingle");
-    history.push("/home");
+    // dispatch(reset());
+    window.location.href = "/home";
+    // history.push("/home");
   };
 
   const webcamRef = React.useRef(null);
@@ -93,13 +116,13 @@ export default function Index() {
               </p>
 
               <p className="font-semibold text-md mt-2 xsquis:mt-0 mt-2 border-b-4 border-gray-500">
-                {id_ujian && id_ujian === 1
+                {/* {id_ujian && id_ujian === 1
                   ? "Sesi TKBI"
                   : id_ujian === 2
                   ? "Sesi TKDA"
                   : id_ujian === 3
                   ? "Sesi Prodi"
-                  : ""}
+                  : ""} */}
               </p>
 
               <div className="flex flex-wrap items-center mt-2 xsquis:mt-0 mb-3 xsquis:mb-0">

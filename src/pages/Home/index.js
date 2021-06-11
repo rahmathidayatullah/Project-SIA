@@ -34,7 +34,7 @@ export default function Home() {
   const [indexSesiQuis, setIndexSesiQuis] = useState(0);
 
   const status = useSelector((state) => state.home.status);
-  console.log("status", status);
+  // console.log("status", status);
 
   // API Home
   const dataHome = useSelector((state) => state.home.data);
@@ -55,7 +55,7 @@ export default function Home() {
 
   // Response from reduce action quizApi
   const quizApi = useSelector((state) => state.quizApi.dataQuizByIndex);
-  console.log("quizApi", quizApi);
+  // console.log("quizApi", quizApi);
 
   // Func Button Mulai Tes
   const verifikasiImage = (id_sesi_ujian) => {
@@ -69,7 +69,7 @@ export default function Home() {
     setImage(imageSrc);
     let dataImageSend = { photo: imageSrc };
     let idUjian = localStorage.getItem("idUjian");
-    console.log("dataImageSend,idUjian", dataImageSend, idUjian);
+    // console.log("dataImageSend,idUjian", dataImageSend, idUjian);
 
     setModalLoad(true);
     let { data } = await getDataQuizByID(idUjian, dataImageSend);
@@ -77,30 +77,30 @@ export default function Home() {
     if (data.data === undefined) {
       console.log("data gagal");
     } else {
-      console.log("data berhasil", data.data.soal);
+      // console.log("data berhasil", data.data.soal);
 
-      let parrents = [];
-      data.data.soal.forEach((parrent) => {
-        let childs = [];
-        parrent.option.forEach((child) => {
-          childs.push({
-            id: child.id,
-            alfabet: child.alfabet,
-            jawaban: child.jawaban,
-            isChecked: false,
-          });
-        });
-        parrents.push({
-          id: parrent.id,
-          question: parrent.question,
-          option: childs,
-          isChecked: false,
-        });
-      });
-      console.log("parrents");
-      console.log(parrents);
+      // let parrents = [];
+      // data.data.soal.forEach((parrent) => {
+      //   let childs = [];
+      //   parrent.option.forEach((child) => {
+      //     childs.push({
+      //       id: child.id,
+      //       alfabet: child.alfabet,
+      //       jawaban: child.jawaban,
+      //       isChecked: false,
+      //     });
+      //   });
+      //   parrents.push({
+      //     id: parrent.id,
+      //     question: parrent.question,
+      //     option: childs,
+      //     isChecked: false,
+      //   });
+      // });
+      // console.log("parrents");
+      // console.log(parrents);
 
-      localStorage.setItem("listSoal", JSON.stringify(parrents));
+      localStorage.setItem("listSoal", JSON.stringify(data.data.soal));
       // dispatch(fetchGetDataQuizByID(data.data.soal));
 
       setTimeout(() => {
