@@ -164,6 +164,13 @@ export default function Quiz() {
                   : ""}
               </p>
 
+              <button
+                className="text-sm px-2 py-1 rounded-md duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none"
+                onClick={() => history.push("/home")}
+              >
+                Kembali ke Home
+              </button>
+
               <div className="flex flex-wrap items-center mt-2 xsquis:mt-0 mb-3 xsquis:mb-0">
                 <p className="text-orange text-sm mr-3 mt-2 xsquis:mt-0">
                   Sisa waktu
@@ -183,7 +190,7 @@ export default function Quiz() {
                   </p>
                 </div>
                 <button
-                  className="text-sm px-2 py-1 rounded-md bg-green duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none mt-2 xsquis:mt-0 mr-2"
+                  className="text-sm px-2 py-1 rounded-md duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none mt-2 xsquis:mt-0 mr-2"
                   onClick={() =>
                     setShowBantuan(showBantuan === false ? true : false)
                   }
@@ -191,7 +198,7 @@ export default function Quiz() {
                   Menu bantuan
                 </button>
                 <button
-                  className="block xl:hidden text-sm px-2 py-1 rounded-md bg-green duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none mt-2 xsquis:mt-0"
+                  className="block xl:hidden text-sm px-2 py-1 rounded-md duration-200 hover:bg-opacity-80 bg-orange text-white focus:outline-none mt-2 xsquis:mt-0"
                   onClick={() =>
                     setShowPengawas(showBantuan === false ? true : false)
                   }

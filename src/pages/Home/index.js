@@ -328,7 +328,12 @@ export default function Home() {
             >
               <img
                 className="w-full rounded-lg"
-                src={image === "" ? IconHero : image}
+                src={
+                  image === ""
+                    ? dataHome.data && dataHome.data.user.foto
+                    : image
+                }
+                alt="profile"
               />
             </div>
             <div className="my-6">
