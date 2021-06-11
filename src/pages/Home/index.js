@@ -201,8 +201,9 @@ export default function Home() {
               </button>
             ) : (
               <button
-                onClick={capture}
+                // onClick={capture}
                 className="px-4 py-2 rounded-lg border bg-blue font-medium text-white text-sm hover:bg-opacity-80 duration-200 flex items-center focus:outline-none outline-none"
+                disabled
               >
                 <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
                   <circle
@@ -259,7 +260,7 @@ export default function Home() {
                   <IconAccount />
                 </div>
                 <ul
-                  className={`${toggleLogout} duration-200 absolute -bottom-12 right-0`}
+                  className={`${toggleLogout} duration-200 absolute -bottom-12 right-0 z-50`}
                 >
                   <li
                     className="cursor-pointer duration-200 hover:bg-gray-50 px-4 py-2 bg-white text-gray-600"

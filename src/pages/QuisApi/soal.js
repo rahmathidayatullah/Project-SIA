@@ -88,9 +88,9 @@ export default function Soal() {
     }
   }, [localStorage.getItem("idUjian")]);
 
-  useEffect(() => {
-    dispatch(fetchQuiz());
-  }, [dispatch, dataQuizSingle.currentIndex, dataQuizSingle.totalSelect]);
+  // useEffect(() => {
+  //   dispatch(fetchQuiz());
+  // }, [dispatch, dataQuizSingle.currentIndex, dataQuizSingle.totalSelect]);
 
   return (
     <div className="border relative overflow-y-scroll h-auto md:h-86vh">
